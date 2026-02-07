@@ -76,6 +76,7 @@ body {
   max-height: 240px;
   object-fit: cover;
   border-radius: 18px;
+  background: #0f172a;
 }
 
 .header-description {
@@ -93,7 +94,8 @@ body {
 /* Mobile adjustments */
 @media (max-width: 600px) {
   .header-banner-image {
-    max-height: 180px;
+    max-height: 160px;
+    object-fit: contain;
   }
   .header-description {
     max-width: 90%;
@@ -392,3 +394,5 @@ body {
     padding: 4px 0 0;
   }
 }
+
+

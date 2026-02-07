@@ -109,7 +109,7 @@ export default function MainTrekApp() {
 
           {/* Banner Image */}
           <img
-            src="/banner.jpg"
+            src={`${import.meta.env.BASE_URL}newbanner.jpg`}
             alt="Trek Banner"
             className="header-banner-image"
           />
@@ -310,3 +310,4 @@ export default function MainTrekApp() {
     </div>
   );
 }
+
