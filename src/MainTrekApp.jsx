@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import "./App.css";
 import { supabase } from "./supabaseClient";
+import { useGroup } from "./GroupContext.jsx";
 
 export default function MainTrekApp() {
   const [memoryType, setMemoryType] = useState("photo");
@@ -11,14 +12,24 @@ export default function MainTrekApp() {
   const [memories, setMemories] = useState([]);
   const [loading, setLoading] = useState(false);
   const [lightboxItem, setLightboxItem] = useState(null);
+  const group = useGroup();
+  const groupLabel = group?.name ?? "Group";
+  const groupId = group?.id ?? null;
 
   // Load memories on first render
   useEffect(() => {
     const loadMemories = async () => {
-      const { data, error } = await supabase
+      let query = supabase
         .from("memories")
         .select("*")
-        .order("created_at", { ascending: false });
+        .order("created_at", { ascending: false })
+        .limit(200);
+
+      if (groupId) {
+        query = query.eq("group_id", groupId);
+      }
+
+      const { data, error } = await query;
 
       if (error) {
         console.error("Error loading:", error);
@@ -29,7 +40,7 @@ export default function MainTrekApp() {
     };
 
     loadMemories();
-  }, []);
+  }, [groupId]);
 
   const handleFileChange = (e) => {
     setFiles(Array.from(e.target.files || []));
@@ -74,6 +85,7 @@ export default function MainTrekApp() {
       }
 
       const payload = {
+        group_id: groupId,
         type: memoryType,
         day,
         title: title.trim() || "(Untitled memory)",
@@ -132,6 +144,7 @@ export default function MainTrekApp() {
           <section className="layout-grid">
             <div className="card">
               <h2 className="card-title">Add a new memory</h2>
+              <p className="card-subtitle">For {groupLabel}</p>
 
               <form className="memory-form" onSubmit={handleSubmit}>
                 <div className="form-row">
@@ -305,5 +318,21 @@ export default function MainTrekApp() {
     </div>
   );
 }
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
 
 
