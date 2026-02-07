@@ -126,21 +126,18 @@ export default function MainTrekApp() {
     <div className="app-root">
       <div className="app-shell">
         <header className="app-header">
-          <img
-            src={`${import.meta.env.BASE_URL}newbanner.jpg`}
-            alt="Groupix banner"
-            className="header-banner-image"
-          />
+          <div className="header-copy">
+            <p className="header-kicker">Groupix</p>
+            <h1 className="header-title">Share once. Everyone uploads.</h1>
+            <p className="header-lede">
+              A fast, frictionless way for groups to drop photos and videos
+              into one shared space.
+            </p>
+          </div>
 
-          <div className="header-description">
-            <p>
-              Groupix brings everyones photos and videos into one shared space.
-              Share a link and everyone can upload in seconds.
-            </p>
-            <p>
-              No logins. No group chats. Just fast uploads for your event or
-              trip.
-            </p>
+          <div className="header-meta">
+            <span className="header-group">Group: {groupLabel}</span>
+            <span className="header-note">Open the link. Add media. Done.</span>
           </div>
         </header>
 
@@ -148,7 +145,7 @@ export default function MainTrekApp() {
           <section className="upload-panel">
             <div className="card">
               <h2 className="card-title">Upload photos and videos</h2>
-              <p className="card-subtitle">Group: {groupLabel}</p>
+              <p className="card-subtitle">Fast uploads for this group.</p>
 
               <form className="memory-form" onSubmit={handleSubmit}>
                 <div className="form-field">
