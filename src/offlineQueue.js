@@ -1,7 +1,7 @@
 import localforage from "localforage";
 
 localforage.config({
-  name: "LakelandTrekApp",
+  name: "GroupixApp",
   storeName: "offlineMemories",
 });
 
@@ -21,3 +21,4 @@ export async function getQueuedMemories() {
 export async function clearQueuedMemories() {
   await localforage.setItem("pendingMemories", []);
 }
+

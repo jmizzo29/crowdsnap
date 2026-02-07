@@ -110,25 +110,20 @@ export default function MainTrekApp() {
           {/* Banner Image */}
           <img
             src={`${import.meta.env.BASE_URL}newbanner.jpg`}
-            alt="Trek Banner"
+            alt="Groupix banner"
             className="header-banner-image"
           />
 
           {/* Description */}
           <div className="header-description">
-            <p>
-              The Lakeland Florida Stake Pioneer Trek is a powerful look into
-              the past, honoring the sacred sacrifices of the 3000 early
-              Latter-day Saint pioneers who walked to Salt Lake City from
-              Nauvoo, Illinois in 1846–47 while pulling handcarts.
-            </p>
+  <p>
+    Groupix brings everyones photos, videos, and notes into one shared space -- no logins, no texting, no digging through chats.
+  </p>
 
-            <p>
-              Our youth walked in their footsteps and gained a deeper testimony
-              of Jesus Christ and what it truly means to walk with Him. Here are
-              photos capturing this meaningful and unforgettable experience.
-            </p>
-          </div>
+  <p>
+    Create a group, share a link, and let everyone contribute. Perfect for trips, reunions, events, and teams.
+  </p>
+</div>
 
         </header>
 
@@ -303,11 +298,12 @@ export default function MainTrekApp() {
         </main>
 
         <footer className="app-footer">
-          <span className="app-footer-title">Lakeland Pioneer Trek</span>
+          <span className="app-footer-title">Groupix</span>
         </footer>
 
       </div>
     </div>
   );
 }
+
 
