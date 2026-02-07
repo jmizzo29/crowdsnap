@@ -104,6 +104,16 @@ body {
   gap: 20px;
 }
 
+.upload-panel {
+  display: block;
+}
+
+.gallery {
+  display: flex;
+  flex-direction: column;
+  gap: 12px;
+}
+
 .layout-grid {
   display: grid;
   grid-template-columns: minmax(0, 1.2fr) minmax(0, 1fr);
@@ -489,3 +499,4 @@ body {
     font-size: 14px;
   }
 }
+
