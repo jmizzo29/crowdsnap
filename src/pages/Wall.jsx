@@ -96,7 +96,7 @@ export default function Wall() {
             <div className="dock-meta">
               <div>{count}</div>
               <div>
-                <Link to={`/g/${group.code.toLowerCase()}/add`}>Name</Link>
+                <Link to={`/g/${group.code.toLowerCase()}/add`}>Phone</Link>
                 {" · "}
                 <Link to={`/g/${group.code.toLowerCase()}/booth`}>Booth</Link>
                 {" · "}

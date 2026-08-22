@@ -31,6 +31,7 @@ export default function UploadControls({
       setProgress(0);
       if (photoRef.current) photoRef.current.value = "";
       if (libraryRef.current) libraryRef.current.value = "";
+      window.setTimeout(() => setToast((current) => (current && !current.endsWith("…") ? "" : current)), 3200);
     }
   }
 

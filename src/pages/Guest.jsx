@@ -33,7 +33,6 @@ export default function Guest() {
         <span className="wordmark">{group.date || "Tonight"}</span>
       </div>
       <div className="guest-body">
-        <p className="kicker">{group.date || "Tonight"}</p>
         <h1 className="display display-lg">{group.name}</h1>
         <p className="lede">One photo. It hits the wall.</p>
 
