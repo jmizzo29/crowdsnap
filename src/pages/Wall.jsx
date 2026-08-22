@@ -1,5 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
+import CampGuestLine from "../components/CampGuestLine.jsx";
 import Lightbox from "../components/Lightbox.jsx";
 import UploadControls from "../components/UploadControls.jsx";
 import { useGuestName } from "../lib/useGuestName.js";
@@ -28,10 +29,19 @@ export default function Wall() {
     };
     const start = window.setTimeout(tick, 0);
     const timer = window.setInterval(tick, POLL_MS);
+    function onCamp(event) {
+      if (!alive) return;
+      if (event.detail?.code !== group.code) return;
+      const item = event.detail.item;
+      if (!item) return;
+      setItems((prev) => [item, ...prev.filter((row) => row.id !== item.id)]);
+    }
+    window.addEventListener("grouppix-camp-media", onCamp);
     return () => {
       alive = false;
       window.clearTimeout(start);
       window.clearInterval(timer);
+      window.removeEventListener("grouppix-camp-media", onCamp);
     };
   }, [group]);
 
@@ -76,6 +86,7 @@ export default function Wall() {
           <i /> Live
         </span>
       </header>
+      <CampGuestLine group={group} pending={items.filter((row) => row.pending).length} />
 
       {flat.length === 0 ? (
         <div className="wall-empty">

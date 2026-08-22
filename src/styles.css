@@ -451,6 +451,37 @@ input, textarea {
   font-size: clamp(28px, 6vw, 48px);
 }
 
+.camp-panel {
+  margin-top: 22px;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 12px;
+  width: min(420px, 100%);
+}
+
+.camp-help {
+  text-align: center;
+}
+
+.camp-line {
+  margin: 8px 16px 0;
+}
+
+.camp-toggle {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+  font-size: 15px;
+  color: var(--sand);
+}
+
+.camp-toggle input {
+  width: 18px;
+  height: 18px;
+  accent-color: var(--gel);
+}
+
 .share-event {
   margin-top: 22px;
   display: flex;

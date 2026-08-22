@@ -161,3 +161,21 @@ export async function cacheRemoteMedia(code, remoteItems) {
 export async function listSeenGroups() {
   return (await seenDb.getItem("list")) || [];
 }
+
+export async function localHasMedia(code, id) {
+  const key = normalizeCode(code);
+  const rows = (await mediaDb.getItem(key)) || [];
+  return rows.some((row) => row.id === id || row.url === id);
+}
+
+export async function localListSendable(code) {
+  const items = await localListMedia(code);
+  const out = [];
+  for (const item of items) {
+    const blob = await localGetBlob(item.blobKey || item.id);
+    if (!blob) continue;
+    const thumb = item.thumbKey ? await localGetBlob(item.thumbKey) : null;
+    out.push({ item, blob, thumb });
+  }
+  return out;
+}

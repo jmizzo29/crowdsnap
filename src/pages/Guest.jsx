@@ -1,4 +1,5 @@
 import { Link, useNavigate } from "react-router-dom";
+import CampGuestLine from "../components/CampGuestLine.jsx";
 import UploadControls from "../components/UploadControls.jsx";
 import { useGuestName } from "../lib/useGuestName.js";
 import { useGroupFromRoute } from "../lib/useGroup.js";
@@ -32,6 +33,7 @@ export default function Guest() {
       <div className="guest-body">
         {group.name ? <h1 className="display display-lg">{group.name}</h1> : null}
         <p className="lede">One photo. It hits the wall.</p>
+        <CampGuestLine group={group} />
 
         <label className="field">
           <span>Your name</span>

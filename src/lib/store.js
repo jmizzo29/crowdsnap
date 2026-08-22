@@ -20,6 +20,7 @@ import {
   remoteListMedia,
   remoteUpload,
 } from "./remoteStore.js";
+import { offerCampPhoto } from "./camp.js";
 import { hasSupabase } from "./supabaseClient.js";
 import {
   supabaseAddMemory,
@@ -142,6 +143,7 @@ export async function addMedia(group, file, { guestName = "", extra = {}, onProg
     { blob: file, thumb: thumbFile },
   );
   if (onProgress) onProgress(0.45);
+  offerCampPhoto(group, localItem, file, thumbFile).catch(() => {});
 
   try {
     const uploaded = await uploadToRemote(group, file, { ...base, pending: false }, { ...meta, thumbFile });
@@ -172,6 +174,15 @@ export async function flushPendingUploads() {
         const group = await localGetGroup(code);
         const blob = await localGetBlob(item.blobKey || item.id);
         if (!group || !blob) continue;
+        try {
+          const remote = await tryRemoteList(group);
+          if (remote.ok && remote.items.some((row) => row.id === item.id || row.url === item.url)) {
+            await localUpdateMedia(code, item.id, { pending: false });
+            continue;
+          }
+        } catch {
+          /* still try upload */
+        }
         const thumb = item.thumbKey ? await localGetBlob(item.thumbKey) : null;
         const file = asUploadFile(blob, item);
         const uploaded = await uploadToRemote(

@@ -10,6 +10,7 @@ export default function CreateForm({ heading = true }) {
   const [coverLine, setCoverLine] = useState("");
   const [busy, setBusy] = useState(false);
   const [error, setError] = useState("");
+  const [offGrid, setOffGrid] = useState(false);
 
   async function onSubmit(event) {
     event.preventDefault();
@@ -26,7 +27,7 @@ export default function CreateForm({ heading = true }) {
         date: date.trim(),
         coverLine: coverLine.trim(),
       });
-      navigate(hostUrl(group.code, ""), { replace: true });
+      navigate(`${hostUrl(group.code, "")}${offGrid ? "?camp=1" : ""}`, { replace: true });
     } catch (err) {
       setError(err.message || "Could not make the group.");
       setBusy(false);
@@ -74,6 +75,18 @@ export default function CreateForm({ heading = true }) {
           maxLength={60}
         />
       </label>
+
+      <label className="camp-toggle">
+        <input
+          type="checkbox"
+          checked={offGrid}
+          onChange={(event) => setOffGrid(event.target.checked)}
+        />
+        We’ll be off the grid
+      </label>
+      {offGrid ? (
+        <p className="fine">Camp starts on the leader phone. Guests join that Wi‑Fi.</p>
+      ) : null}
 
       <div>
         <button className="btn" type="submit" disabled={busy}>
