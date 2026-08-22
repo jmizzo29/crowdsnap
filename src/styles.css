@@ -1,8 +1,8 @@
 :root {
   color-scheme: dark;
-  --bg: #1f1a16;
-  --well: #181410;
-  --raised: #2a231c;
+  --bg: #231c16;
+  --well: #1a1612;
+  --raised: #2d241c;
   --ink: #f6f1e8;
   --muted: #9a9184;
   --dim: #6d655b;
@@ -68,8 +68,8 @@ input, textarea {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(820px 520px at 12% -8%, rgba(232, 176, 110, 0.16), transparent 62%),
-    radial-gradient(640px 420px at 88% 108%, rgba(120, 72, 36, 0.14), transparent 58%);
+    radial-gradient(900px 560px at 10% -12%, rgba(232, 176, 110, 0.2), transparent 64%),
+    radial-gradient(720px 460px at 92% 112%, rgba(120, 72, 36, 0.16), transparent 58%);
 }
 
 .grain {
@@ -216,7 +216,8 @@ input, textarea {
   display: flex;
   flex-direction: column;
   background:
-    linear-gradient(180deg, rgba(31, 26, 22, 0.22) 0%, rgba(31, 26, 22, 0.58) 46%, var(--bg) 100%),
+    radial-gradient(900px 560px at 10% -12%, rgba(232, 176, 110, 0.18), transparent 64%),
+    linear-gradient(180deg, rgba(35, 28, 22, 0.18) 0%, rgba(35, 28, 22, 0.5) 48%, var(--bg) 100%),
     url("/images/hero-gel.jpg") center 30% / cover no-repeat;
 }
 
