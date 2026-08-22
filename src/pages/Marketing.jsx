@@ -22,8 +22,6 @@ export default function Marketing() {
 
   return (
     <div className="page">
-      <div className="grain" />
-
       <header className="hero">
         <div className="topbar">
           <span className="wordmark">{APP_NAME}</span>

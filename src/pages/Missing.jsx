@@ -14,8 +14,6 @@ export default function Missing({ code }) {
 
   return (
     <div className="page">
-      <div className="gel" />
-      <div className="grain" />
       <div className="quiet">
         <p className="kicker">Grouppix</p>
         <h1 className="display display-md">That code is not a door.</h1>

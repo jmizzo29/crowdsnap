@@ -12,7 +12,6 @@ export default function Guest() {
   if (status === "loading") {
     return (
       <div className="page guest">
-        <div className="gel" />
         <div className="quiet">
           <p className="lede">Opening the door…</p>
         </div>
@@ -24,8 +23,6 @@ export default function Guest() {
 
   return (
     <div className="page guest">
-      <div className="gel" />
-      <div className="grain" />
       <div className="topbar">
         <Link className="wordmark" to={`/g/${group.code.toLowerCase()}`}>
           Wall

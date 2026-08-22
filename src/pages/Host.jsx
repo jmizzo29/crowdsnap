@@ -17,8 +17,6 @@ export default function Host() {
 
   return (
     <div className="page host">
-      <div className="gel" />
-      <div className="grain" />
       <div className="topbar">
         <Link className="wordmark" to="/">
           {APP_NAME}
@@ -47,7 +45,6 @@ export default function Host() {
 function Shell({ children }) {
   return (
     <div className="page host">
-      <div className="gel" />
       <div className="quiet">
         <p className="kicker">{APP_NAME}</p>
         <p className="lede">{children}</p>
