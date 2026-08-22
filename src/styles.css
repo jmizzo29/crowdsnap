@@ -89,12 +89,16 @@ input, textarea {
 }
 
 .kicker {
-  margin: 0 0 10px;
-  font-size: 11px;
+  margin: 0 0 12px;
+  display: inline-block;
+  font-size: 13px;
   font-weight: 500;
-  letter-spacing: 0.38em;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--olive);
+  color: var(--ink);
+  background: var(--soil);
+  padding: 5px 11px 4px;
+  border-radius: 999px;
 }
 
 .display {
@@ -175,10 +179,11 @@ input, textarea {
 }
 
 .field span {
-  font-size: 11px;
-  letter-spacing: 0.28em;
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
   text-transform: uppercase;
-  color: var(--muted);
+  color: var(--ink);
 }
 
 .field input {
@@ -287,9 +292,10 @@ input, textarea {
 .step-num {
   display: block;
   margin-bottom: 14px;
-  font-size: 11px;
-  letter-spacing: 0.3em;
-  color: var(--gel);
+  font-size: 13px;
+  font-weight: 500;
+  letter-spacing: 0.12em;
+  color: var(--ink);
 }
 
 .step h3 {
