@@ -64,7 +64,11 @@ export default function Wall() {
           <Link className="wordmark" to="/">
             {APP_NAME}
           </Link>
-          <h1 className="display display-md">{group.name}</h1>
+          {group.name ? (
+            <h1 className="display display-md">{group.name}</h1>
+          ) : group.date ? (
+            <h1 className="display display-md">{group.date}</h1>
+          ) : null}
         </div>
         <span className="live">
           <i /> Live

@@ -31,8 +31,8 @@ export default function Stand() {
         {group.date ? <span className="wordmark">{group.date}</span> : <span />}
       </div>
       <div className="stand-main">
-        <h1 className="display display-xl">{group.name}</h1>
-        <QRCard value={groupUrl(group.code)} label={`${group.name} stand QR`} />
+        {group.name ? <h1 className="display display-xl">{group.name}</h1> : null}
+        <QRCard value={groupUrl(group.code)} label={`${group.name || group.date || "Grouppix"} stand QR`} />
         <p className="secret">{formatCode(group.code)}</p>
         <p className="lede" style={{ marginTop: 22 }}>
           Scan. Take one. It hits the wall.

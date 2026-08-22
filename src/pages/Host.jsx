@@ -25,9 +25,9 @@ export default function Host() {
         {group.date ? <span className="wordmark">{group.date}</span> : <span />}
       </div>
       <div className="host-main">
-        <p className="kicker">{group.coverLine || "The door"}</p>
-        <h1 className="display display-lg">{group.name}</h1>
-        <QRCard value={url} label={`${group.name} QR`} />
+        {group.coverLine ? <p className="kicker">{group.coverLine}</p> : <p className="kicker">The door</p>}
+        {group.name ? <h1 className="display display-lg">{group.name}</h1> : null}
+        <QRCard value={url} label={`${group.name || group.date || "Grouppix"} QR`} />
         <p className="secret">{formatCode(group.code)}</p>
         <p className="note">Scan. Take one. It hits the wall.</p>
         <ShareEvent group={group} />

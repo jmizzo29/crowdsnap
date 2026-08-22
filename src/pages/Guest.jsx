@@ -30,7 +30,7 @@ export default function Guest() {
         {group.date ? <span className="wordmark">{group.date}</span> : <span />}
       </div>
       <div className="guest-body">
-        <h1 className="display display-lg">{group.name}</h1>
+        {group.name ? <h1 className="display display-lg">{group.name}</h1> : null}
         <p className="lede">One photo. It hits the wall.</p>
 
         <label className="field">
