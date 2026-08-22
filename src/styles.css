@@ -468,20 +468,6 @@ input, textarea {
   margin: 8px 16px 0;
 }
 
-.camp-toggle {
-  display: flex;
-  align-items: center;
-  gap: 10px;
-  font-size: 15px;
-  color: var(--sand);
-}
-
-.camp-toggle input {
-  width: 18px;
-  height: 18px;
-  accent-color: var(--gel);
-}
-
 .share-event {
   margin-top: 22px;
   display: flex;
