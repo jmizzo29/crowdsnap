@@ -6,9 +6,10 @@ export default function ShareEvent({ group }) {
   const url = groupUrl(group.code);
 
   async function share() {
+    const label = group.name || group.date || "Grouppix";
     const payload = {
-      title: group.name,
-      text: `${group.name}. Scan to add a photo.`,
+      title: label,
+      text: `${label}. Scan to add a photo.`,
       url,
     };
     try {
