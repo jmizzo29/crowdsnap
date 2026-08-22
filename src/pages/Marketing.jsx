@@ -29,18 +29,23 @@ export default function Marketing() {
             Buy
           </a>
         </div>
-        <div className="hero-body">
-          <p className="kicker">Tonight</p>
-          <h1 className="display display-xl">Put the QR on a table. The room fills the wall.</h1>
-          <p className="lede">Guests scan. They add a photo. It hits the wall.</p>
-          <div className="hero-actions">
-            <Link className="btn" to="/new">
-              Make a group
-            </Link>
-            <a className="btn-ghost" href="#how">
-              How it works
-            </a>
+        <div className="hero-split wrap">
+          <div className="hero-body">
+            <p className="kicker">Tonight</p>
+            <h1 className="display display-xl">Put the QR on a table. The room fills the wall.</h1>
+            <p className="lede">Guests scan. They add a photo. It hits the wall.</p>
+            <div className="hero-actions">
+              <Link className="btn" to="/new">
+                Make a group
+              </Link>
+              <a className="btn-ghost" href="#how">
+                How it works
+              </a>
+            </div>
           </div>
+          <figure className="hero-frame">
+            <img src="/images/hero-family.jpg" alt="" />
+          </figure>
         </div>
       </header>
 
