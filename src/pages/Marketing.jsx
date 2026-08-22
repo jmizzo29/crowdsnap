@@ -30,8 +30,7 @@ export default function Marketing() {
         </div>
         <div className="hero-split wrap">
           <div className="hero-body">
-            <p className="kicker">Tonight</p>
-            <h1 className="display display-xl">Put the QR on a table. The room fills the wall.</h1>
+            <h1 className="display display-xl">Share the QR. Or put it on a table. The wall fills up.</h1>
             <p className="lede">Guests scan. They add a photo. It hits the wall.</p>
             <div className="hero-actions">
               <a className="btn" href={PAYMENT_LINK}>
@@ -55,8 +54,8 @@ export default function Marketing() {
             <div className="steps">
               <article className="step">
                 <span className="step-num">01</span>
-                <h3>Name the night</h3>
-                <p>A title, a date, a line on the card if you want one. That is the whole setup.</p>
+                <h3>Name the event</h3>
+                <p>A title, a date or a weekend, a line on the card if you want one. That is the whole setup.</p>
               </article>
               <article className="step">
                 <span className="step-num">02</span>
@@ -111,12 +110,12 @@ export default function Marketing() {
             <div className="buy-block">
               <h2 className="section-title">$49. One event.</h2>
               <p className="prose">
-                Pay once for the night. Guests never pay. Not a subscription.
+                Pay once for the event. Guests never pay. Not a subscription.
               </p>
               <a className="btn" href={PAYMENT_LINK}>
                 Buy · $49
               </a>
-              <p className="fine">After you pay, you name the night and get your code.</p>
+              <p className="fine">After you pay, you name the event and get your code.</p>
             </div>
           </div>
         </section>
@@ -155,7 +154,7 @@ export default function Marketing() {
 
       <footer className="wrap site-foot">
         <span>{APP_NAME}</span>
-        <span>The wall is this machine tonight</span>
+        <span>The wall is this machine</span>
       </footer>
     </div>
   );

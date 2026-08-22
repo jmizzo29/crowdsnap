@@ -7,6 +7,7 @@ import { APP_NAME, POLL_MS } from "../lib/config.js";
 import { formatWallCount } from "../lib/plural.js";
 import { isSharedGroup, listMedia } from "../lib/store.js";
 import { useGroupFromRoute } from "../lib/useGroup.js";
+import { formatShortTime, groupMediaByDay, parseItemTime } from "../lib/when.js";
 import Missing from "./Missing.jsx";
 
 export default function Wall() {
@@ -32,7 +33,16 @@ export default function Wall() {
     };
   }, [group]);
 
-  const current = open >= 0 ? items[open] : null;
+  const days = useMemo(() => groupMediaByDay(items), [items]);
+  const flat = useMemo(() => days.flatMap((day) => day.items), [days]);
+  const indexByKey = useMemo(() => {
+    const map = new Map();
+    flat.forEach((item, index) => {
+      map.set(item.id || item.url || index, index);
+    });
+    return map;
+  }, [flat]);
+  const current = open >= 0 ? flat[open] : null;
   const count = useMemo(() => formatWallCount(items), [items]);
 
   if (status === "loading") {
@@ -61,34 +71,45 @@ export default function Wall() {
         </span>
       </header>
 
-      {items.length === 0 ? (
+      {flat.length === 0 ? (
         <div className="wall-empty">
-          <p className="kicker">{group.date || "Tonight"}</p>
+          {group.date ? <p className="kicker">{group.date}</p> : null}
           <h2 className="display display-md">The wall is waiting.</h2>
-          <p className="lede">First photo opens the night. Videos are welcome too.</p>
+          <p className="lede">First photo opens the wall. Videos are welcome too.</p>
         </div>
       ) : (
-        <div className="masonry">
-          {items.map((item, index) => (
-            <button
-              key={item.id || item.url || index}
-              type="button"
-              className="tile"
-              onClick={() => setOpen(index)}
-            >
-              {item.kind === "video" && !item.thumbUrl ? (
-                <video src={item.url} muted playsInline preload="metadata" />
-              ) : (
-                <img
-                  src={item.thumbUrl || item.url}
-                  alt={item.name || ""}
-                  loading="lazy"
-                />
-              )}
-              {item.kind === "video" ? <span className="play">Video</span> : null}
-            </button>
-          ))}
-        </div>
+        days.map((day) => (
+          <section key={day.key} className="day-block">
+            <h2 className="day-head">{day.label}</h2>
+            <div className="masonry">
+              {day.items.map((item, slot) => {
+                const key = item.id || item.url || `${day.key}-${slot}`;
+                const index = indexByKey.get(item.id || item.url || key) ?? 0;
+                const time = parseItemTime(item);
+                return (
+                  <button
+                    key={item.id || item.url || index}
+                    type="button"
+                    className="tile"
+                    onClick={() => setOpen(index)}
+                  >
+                    {item.kind === "video" && !item.thumbUrl ? (
+                      <video src={item.url} muted playsInline preload="metadata" />
+                    ) : (
+                      <img
+                        src={item.thumbUrl || item.url}
+                        alt={item.name || ""}
+                        loading="lazy"
+                      />
+                    )}
+                    {item.kind === "video" ? <span className="play">Video</span> : null}
+                    {time ? <span className="tile-time">{formatShortTime(time)}</span> : null}
+                  </button>
+                );
+              })}
+            </div>
+          </section>
+        ))
       )}
 
       <UploadControls
@@ -124,8 +145,8 @@ export default function Wall() {
       <Lightbox
         item={current}
         onClose={() => setOpen(-1)}
-        onPrev={() => setOpen((i) => (i <= 0 ? items.length - 1 : i - 1))}
-        onNext={() => setOpen((i) => (i + 1) % items.length)}
+        onPrev={() => setOpen((i) => (i <= 0 ? flat.length - 1 : i - 1))}
+        onNext={() => setOpen((i) => (i + 1) % flat.length)}
       />
     </div>
   );

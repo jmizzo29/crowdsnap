@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import HostLinks from "../components/HostLinks.jsx";
 import QRCard from "../components/QRCard.jsx";
+import ShareEvent from "../components/ShareEvent.jsx";
 import { APP_NAME, groupUrl } from "../lib/config.js";
 import { formatCode } from "../lib/codes.js";
 import { useGroupFromRoute } from "../lib/useGroup.js";
@@ -27,7 +28,7 @@ export default function Stand() {
         <Link className="wordmark" to="/">
           {APP_NAME}
         </Link>
-        <span className="wordmark">{group.date || "Tonight"}</span>
+        {group.date ? <span className="wordmark">{group.date}</span> : <span />}
       </div>
       <div className="stand-main">
         <h1 className="display display-xl">{group.name}</h1>
@@ -36,7 +37,8 @@ export default function Stand() {
         <p className="lede" style={{ marginTop: 22 }}>
           Scan. Take one. It hits the wall.
         </p>
-        <p className="note">The wall is this machine tonight.</p>
+        <ShareEvent group={group} />
+        <p className="note">The wall is this machine.</p>
         <HostLinks code={group.code} className="stand-links" />
       </div>
     </div>

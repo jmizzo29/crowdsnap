@@ -27,7 +27,7 @@ export default function Guest() {
         <Link className="wordmark" to={`/g/${group.code.toLowerCase()}`}>
           Wall
         </Link>
-        <span className="wordmark">{group.date || "Tonight"}</span>
+        {group.date ? <span className="wordmark">{group.date}</span> : <span />}
       </div>
       <div className="guest-body">
         <h1 className="display display-lg">{group.name}</h1>

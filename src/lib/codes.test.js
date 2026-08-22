@@ -2,6 +2,7 @@ import { describe, it } from "node:test";
 import assert from "node:assert/strict";
 import { formatCode, generateCode, isValidCode, normalizeCode } from "./codes.js";
 import { formatWallCount } from "./plural.js";
+import { formatDayLabel, formatShortTime, groupMediaByDay } from "./when.js";
 
 describe("codes", () => {
   it("normalizes and formats a human code", () => {
@@ -34,5 +35,26 @@ describe("plural", () => {
       formatWallCount([{ kind: "video" }, { kind: "video" }]),
       "2 videos",
     );
+  });
+});
+
+describe("when", () => {
+  it("groups newest day first and sorts a day by time", () => {
+    const friday = new Date(2026, 7, 21, 19, 10);
+    const fridayLater = new Date(2026, 7, 21, 21, 40);
+    const saturday = new Date(2026, 7, 22, 10, 5);
+    const days = groupMediaByDay([
+      { id: "sat", createdAt: saturday.toISOString() },
+      { id: "late", takenAt: fridayLater.toISOString() },
+      { id: "early", createdAt: friday.toISOString() },
+      { id: "none" },
+    ]);
+    assert.equal(days[0].items.map((row) => row.id).join(","), "sat");
+    assert.equal(days[1].items.map((row) => row.id).join(","), "early,late");
+    assert.equal(days[2].key, "undated");
+    assert.match(formatDayLabel(friday), /Friday/);
+    assert.match(formatDayLabel(friday), /21/);
+    assert.match(formatDayLabel(friday), /August/);
+    assert.match(formatShortTime(friday), /7:10/);
   });
 });

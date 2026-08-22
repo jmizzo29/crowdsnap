@@ -15,7 +15,7 @@ export default function CreateForm({ heading = true }) {
     event.preventDefault();
     const eventName = name.trim();
     if (!eventName) {
-      setError("Give the night a name.");
+      setError("Give the event a name.");
       return;
     }
     setBusy(true);
@@ -37,8 +37,8 @@ export default function CreateForm({ heading = true }) {
     <form className="stack gap-l" onSubmit={onSubmit}>
       {heading ? (
         <div>
-          <p className="kicker">Tonight</p>
-          <h2 className="display display-md">Put the QR on a table. The room fills the wall.</h2>
+          <h2 className="display display-md">Name the event</h2>
+          <p className="lede">One night or several days. Same code.</p>
         </div>
       ) : null}
 
@@ -58,9 +58,9 @@ export default function CreateForm({ heading = true }) {
         <input
           value={date}
           onChange={(e) => setDate(e.target.value)}
-          placeholder="21 August"
+          placeholder="21 August or 21–23 August"
           autoComplete="off"
-          maxLength={40}
+          maxLength={48}
         />
       </label>
 

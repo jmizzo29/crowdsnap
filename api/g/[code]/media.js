@@ -36,23 +36,57 @@ function slugOf(code) {
   return normalizeCode(code).toLowerCase();
 }
 
+const MEDIA_CAP = 5000;
+
 function entryPrefix(code) {
   return `groups/${slugOf(code)}/entry/`;
 }
 
+function clientTime(item) {
+  for (const raw of [item?.createdAt, item?.takenAt]) {
+    if (!raw) continue;
+    const date = new Date(raw);
+    if (!Number.isNaN(date.getTime())) return date.toISOString();
+  }
+  return "";
+}
+
+async function listEntryBlobs(prefix) {
+  const blobs = [];
+  let cursor;
+  for (let pageNum = 0; pageNum < 6; pageNum += 1) {
+    const page = await list({
+      prefix,
+      limit: 1000,
+      cursor,
+    });
+    const batch = page.blobs || [];
+    blobs.push(...batch);
+    if (!batch.length || !page.cursor || page.cursor === cursor) break;
+    if (page.hasMore === false) break;
+    cursor = page.cursor;
+    if (blobs.length >= MEDIA_CAP) break;
+  }
+  return blobs.slice(0, MEDIA_CAP);
+}
+
 async function readIndex(code) {
   if (hasBlob()) {
-    const { blobs } = await list({ prefix: entryPrefix(code), limit: 1000 });
+    const blobs = await listEntryBlobs(entryPrefix(code));
     const items = [];
     await Promise.all(
-      (blobs || []).map(async (blob) => {
+      blobs.map(async (blob) => {
         const remote = await fetch(blob.url, { cache: "no-store" });
         if (!remote.ok) return;
         const data = await remote.json();
         if (data?.id && data?.url) items.push(data);
       }),
     );
-    items.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+    items.sort((a, b) => {
+      const left = String(b.takenAt || b.createdAt || "");
+      const right = String(a.takenAt || a.createdAt || "");
+      return left.localeCompare(right);
+    });
     return items;
   }
 
@@ -69,7 +103,7 @@ async function readIndex(code) {
     .select("id, created_at, title, notes, media")
     .eq("group_id", group.id)
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(MEDIA_CAP);
   const items = [];
   for (const memory of data || []) {
     for (const item of memory.media || []) {
@@ -87,9 +121,13 @@ async function readIndex(code) {
 }
 
 async function writeItem(code, item) {
+  const created = clientTime({ createdAt: item.createdAt });
+  const taken = clientTime({ takenAt: item.takenAt });
+  const when = created || taken || new Date().toISOString();
   const saved = {
     ...item,
-    createdAt: item.createdAt || new Date().toISOString(),
+    createdAt: created || when,
+    takenAt: taken || created || when,
   };
 
   if (hasBlob()) {

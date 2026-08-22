@@ -1,6 +1,7 @@
 import { Link } from "react-router-dom";
 import HostLinks from "../components/HostLinks.jsx";
 import QRCard from "../components/QRCard.jsx";
+import ShareEvent from "../components/ShareEvent.jsx";
 import { APP_NAME, groupUrl } from "../lib/config.js";
 import { formatCode } from "../lib/codes.js";
 import { isSharedGroup } from "../lib/store.js";
@@ -21,7 +22,7 @@ export default function Host() {
         <Link className="wordmark" to="/">
           {APP_NAME}
         </Link>
-        <span className="wordmark">{group.date || "Tonight"}</span>
+        {group.date ? <span className="wordmark">{group.date}</span> : <span />}
       </div>
       <div className="host-main">
         <p className="kicker">{group.coverLine || "The door"}</p>
@@ -29,6 +30,7 @@ export default function Host() {
         <QRCard value={url} label={`${group.name} QR`} />
         <p className="secret">{formatCode(group.code)}</p>
         <p className="note">Scan. Take one. It hits the wall.</p>
+        <ShareEvent group={group} />
         <HostLinks code={group.code} />
         {!isSharedGroup(group) ? (
           <p className="warn">
