@@ -1,17 +1,18 @@
 :root {
   color-scheme: dark;
-  --bg: #4a4036;
-  --well: #3a3229;
-  --raised: #5c5044;
-  --ink: #f4eadc;
-  --muted: #c4b6a4;
-  --dim: #9a8c7a;
-  --gel: #c4785a;
-  --gel-deep: #a85f45;
+  --bg: #6a5d4f;
+  --well: #564b40;
+  --raised: #7a6c5c;
+  --ink: #f3ead8;
+  --muted: #d4c6b0;
+  --dim: #a89880;
+  --gel: #c4a07a;
+  --gel-deep: #a88462;
   --cream: #f3ead8;
-  --sand: #e6d8c4;
-  --olive: #8a8470;
-  --line: rgba(244, 234, 220, 0.22);
+  --sand: #e8dcc8;
+  --olive: #8f8a6e;
+  --soil: #3f362c;
+  --line: rgba(232, 220, 200, 0.28);
   --serif: "Cormorant Garamond", "Times New Roman", serif;
   --sans: "Outfit", "Helvetica Neue", sans-serif;
 }
@@ -70,8 +71,8 @@ input, textarea {
   pointer-events: none;
   z-index: 0;
   background:
-    radial-gradient(980px 620px at 8% -14%, rgba(232, 196, 148, 0.22), transparent 66%),
-    radial-gradient(760px 480px at 96% 118%, rgba(138, 132, 112, 0.16), transparent 60%);
+    radial-gradient(980px 620px at 8% -14%, rgba(232, 214, 176, 0.26), transparent 66%),
+    radial-gradient(760px 480px at 96% 118%, rgba(143, 138, 110, 0.18), transparent 60%);
 }
 
 .page {
@@ -136,7 +137,7 @@ input, textarea {
   padding: 0 24px;
   border-radius: 999px;
   background: var(--gel);
-  color: var(--cream);
+  color: var(--soil);
   font-size: 15px;
   font-weight: 500;
   letter-spacing: 0.01em;
@@ -211,8 +212,8 @@ input, textarea {
   display: flex;
   flex-direction: column;
   background:
-    radial-gradient(900px 560px at 12% 0%, rgba(232, 196, 148, 0.2), transparent 62%),
-    linear-gradient(180deg, rgba(74, 64, 54, 0.12) 0%, rgba(74, 64, 54, 0.42) 48%, var(--bg) 100%),
+    radial-gradient(900px 560px at 12% 0%, rgba(232, 214, 176, 0.22), transparent 62%),
+    linear-gradient(180deg, rgba(106, 93, 79, 0.1) 0%, rgba(106, 93, 79, 0.36) 48%, var(--bg) 100%),
     url("/images/hero-family.jpg") center 42% / cover no-repeat;
 }
 
@@ -502,7 +503,7 @@ input, textarea {
   letter-spacing: 0.18em;
   text-transform: uppercase;
   color: var(--cream);
-  background: rgba(58, 50, 41, 0.55);
+  background: rgba(86, 75, 64, 0.5);
   padding: 4px 9px;
   border-radius: 999px;
 }
@@ -594,7 +595,7 @@ input, textarea {
   content: "";
   position: absolute;
   inset: 0;
-  background: rgba(196, 120, 90, 0.22);
+  background: rgba(196, 160, 122, 0.22);
   pointer-events: none;
 }
 
@@ -649,7 +650,7 @@ input, textarea {
   position: fixed;
   inset: 0;
   z-index: 20;
-  background: rgba(58, 50, 41, 0.9);
+  background: rgba(86, 75, 64, 0.88);
   display: flex;
   flex-direction: column;
 }
