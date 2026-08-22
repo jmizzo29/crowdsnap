@@ -472,6 +472,19 @@ input, textarea {
   background: linear-gradient(180deg, var(--bg) 55%, transparent);
 }
 
+.wall-head-lead {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+  min-width: 0;
+}
+
+.wall-head .wordmark {
+  width: fit-content;
+  padding: 6px 0;
+  color: var(--cream);
+}
+
 .live {
   display: inline-flex;
   align-items: center;

@@ -3,7 +3,7 @@ import { Link } from "react-router-dom";
 import Lightbox from "../components/Lightbox.jsx";
 import UploadControls from "../components/UploadControls.jsx";
 import { useGuestName } from "../lib/useGuestName.js";
-import { POLL_MS } from "../lib/config.js";
+import { APP_NAME, POLL_MS } from "../lib/config.js";
 import { formatWallCount } from "../lib/plural.js";
 import { isSharedGroup, listMedia } from "../lib/store.js";
 import { useGroupFromRoute } from "../lib/useGroup.js";
@@ -50,7 +50,12 @@ export default function Wall() {
   return (
     <div className="page wall-page">
       <header className="wall-head">
-        <h1 className="display display-md">{group.name}</h1>
+        <div className="wall-head-lead">
+          <Link className="wordmark" to="/">
+            {APP_NAME}
+          </Link>
+          <h1 className="display display-md">{group.name}</h1>
+        </div>
         <span className="live">
           <i /> Live
         </span>
