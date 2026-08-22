@@ -25,13 +25,23 @@ Hand people the QR or the link on the stand. Knowing the code is the invite.
 
 ## One-time purchase
 
-The marketing **Buy Grouppix** button uses:
+Price is **$49 USD once per event**. Guests never pay. `/g/:id` stays free.
+
+The marketing **Buy · $49** buttons use `VITE_PAYMENT_LINK`. Leave that env var. Do not hardcode a `buy.stripe.com` URL in the app.
+
+Create a Stripe Payment Link (one-time $49 USD, not a subscription). In the Payment Link settings, set the success URL to:
 
 ```
-VITE_PAYMENT_LINK=https://buy.stripe.com/placeholder
+https://grouppix.vercel.app/new
 ```
 
-Paste your Stripe Payment Link, Lemon Squeezy, or Polar URL. Do not build custom checkout. One-time, not a subscription.
+That is where the host names the night and gets a code. Then set on Vercel:
+
+```
+VITE_PAYMENT_LINK=<your Stripe Payment Link>
+```
+
+Until that env is set, Buy still points at the existing placeholder. Soft gate only: paying lands on `/new`. No webhooks, auth, or paid-token verifier.
 
 ## Shared wall (two phones)
 
@@ -69,7 +79,7 @@ npm test
 
 1. Import `jmizzo29/crowdsnap`.
 2. Framework: Vite. Output: `dist`.
-3. Set `VITE_PAYMENT_LINK` to your payment URL.
+3. Set `VITE_PAYMENT_LINK` to your Stripe Payment Link ($49 once). Success URL: `https://grouppix.vercel.app/new`.
 4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (or `BLOB_READ_WRITE_TOKEN`).
 5. Deploy. Routes are client-side; `vercel.json` rewrites the SPA and leaves `/api` alone.
 
@@ -81,4 +91,4 @@ The previous GitHub Pages `base: /crowdsnap/` is gone. The site is meant to live
 - Photos and videos (videos are capped at 80 MB and never dropped silently)
 - Photos are resized on the phone before upload
 - Optional first name on upload; never required to view
-- Warm copy for weddings, graduations, house parties, funerals, feast days — not a public social feed
+- First market is youth group events; same private-room product for other gatherings — not a public social feed

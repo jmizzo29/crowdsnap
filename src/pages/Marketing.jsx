@@ -26,7 +26,7 @@ export default function Marketing() {
         <div className="topbar">
           <span className="wordmark">{APP_NAME}</span>
           <a className="btn-ghost" href={PAYMENT_LINK}>
-            Buy
+            Buy · $49
           </a>
         </div>
         <div className="hero-split wrap">
@@ -44,7 +44,7 @@ export default function Marketing() {
             </div>
           </div>
           <figure className="hero-frame">
-            <img src="/images/hero-wedding.jpg" alt="" />
+            <img src="/images/hero-youth.jpg" alt="Teens at a youth group night in a church rec room" />
           </figure>
         </div>
       </header>
@@ -79,17 +79,17 @@ export default function Marketing() {
               <p className="kicker">Who it is for</p>
               <h2 className="section-title">Any private gathering that should stay in the room.</h2>
               <ul className="who-list">
-                <li>A wedding supper, or the lunch after.</li>
+                <li>A youth group night in the rec room.</li>
+                <li>A lock-in, a game night, a cookout on the lawn.</li>
+                <li>A retreat, a send-off, a Sunday after.</li>
                 <li>A graduation in a yard.</li>
-                <li>A house party that ran late.</li>
-                <li>A funeral where people needed something quiet to do with their hands.</li>
-                <li>A feast day, a naming, a house blessing.</li>
+                <li>A wedding supper, or the lunch after.</li>
               </ul>
             </div>
             <div className="stills">
-              <img className="tall" src="/images/still-wedding-guests.jpg" alt="" />
-              <img className="wide" src="/images/still-wedding-ceremony.jpg" alt="" />
-              <img className="wide" src="/images/still-wedding-after.jpg" alt="" />
+              <img className="tall" src="/images/still-youth-games.jpg" alt="Teens playing a giant block game at youth group" />
+              <img className="wide" src="/images/still-youth-outdoor.jpg" alt="Outdoor church youth night with lawn games" />
+              <img className="wide" src="/images/still-youth-hangout.jpg" alt="Youth group hangout in a rec room" />
             </div>
           </div>
         </section>
@@ -110,14 +110,14 @@ export default function Marketing() {
           <div className="wrap">
             <p className="kicker">One time</p>
             <div className="buy-block">
-              <h2 className="section-title">Pay once. Run the night.</h2>
+              <h2 className="section-title">$49. One event.</h2>
               <p className="prose">
-                Not a subscription. Paste your Stripe Payment Link, Lemon Squeezy, or Polar URL into the app config when you deploy.
+                Pay once for the night. Guests never pay. Not a subscription.
               </p>
               <a className="btn" href={PAYMENT_LINK}>
-                Buy Grouppix
+                Buy · $49
               </a>
-              <p className="fine">Money later. Off to the side.</p>
+              <p className="fine">After you pay, you name the night and get your code.</p>
             </div>
           </div>
         </section>
