@@ -39,12 +39,7 @@ $49 USD once per event. Guests never pay. Cards stay on Polar. Success URL: `htt
 
 The old factory page could look like a group while staying on one device. This build is honest about that.
 
-**Already in this repo:** Supabase groups + `memories` + the `trip-media` bucket. If `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` are set (they are on the current Vercel site), create / wall / upload go through Supabase. Two phones with the same code see the same wall.
-
-1. Create a Supabase project (or keep the existing one).
-2. Run `supabase/schema.sql`.
-3. Create a public storage bucket named `trip-media` (or set `VITE_SUPABASE_BUCKET`).
-4. Set the two `VITE_` keys on Vercel.
+**Shared wall without one giant JSON file:** create a free Supabase project, run `supabase/schema.sql` in the SQL editor, then set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` on Vercel and redeploy. The SQL makes `groups`, `memories`, and a public `trip-media` bucket with anon read/upload. New events then store each photo as its own row (5000+ is fine). Existing Blob groups such as NITE stay on Blob until you recreate them. Do not invent those keys — paste them from the Supabase project.
 
 **Optional, Vercel-native:** set `BLOB_READ_WRITE_TOKEN` on Vercel. `/api` then stores group JSON and media in Vercel Blob. Guests upload straight to Blob (not through the 4.5 MB serverless body limit).
 

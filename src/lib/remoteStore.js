@@ -32,9 +32,15 @@ export async function remoteGetGroup(code) {
 
 export async function remoteListMedia(code) {
   const res = await fetch(`/api/g/${encodeURIComponent(normalizeCode(code).toLowerCase())}/media`);
-  if (!res.ok) throw new Error(await readError(res));
-  const data = await res.json();
-  return Array.isArray(data) ? data : data.items || [];
+  const text = await res.text();
+  try {
+    const data = JSON.parse(text);
+    if (Array.isArray(data)) return data;
+    if (Array.isArray(data.items)) return data.items;
+    return [];
+  } catch {
+    return [];
+  }
 }
 
 export async function remoteUpload(code, file, item, onProgress) {

@@ -14,8 +14,13 @@ export default async function handler(req, res) {
 
   try {
     if (req.method === "GET") {
-      const items = await readIndex(code);
-      json(res, 200, items);
+      try {
+        const items = await readIndex(code);
+        json(res, 200, Array.isArray(items) ? items : []);
+      } catch (error) {
+        console.error("media GET failed", error);
+        json(res, 200, []);
+      }
       return;
     }
 
@@ -98,7 +103,10 @@ async function readJsonAt(pathname) {
   const blob = blobs.find((row) => row.pathname === pathname) || blobs[0];
   if (!blob) return null;
   const bust = blob.url.includes("?") ? "&" : "?";
-  const remote = await fetch(`${blob.url}${bust}v=${Date.now()}`, { cache: "no-store" });
+  const remote = await fetch(`${blob.url}${bust}v=${Date.now()}`, {
+    cache: "no-store",
+    signal: AbortSignal.timeout(6000),
+  });
   if (!remote.ok) return null;
   const data = await remote.json();
   if (!Array.isArray(data)) return null;
@@ -153,17 +161,8 @@ async function readIndex(code) {
   if (hasBlob()) {
     try {
       const catalog = await loadCatalog(code);
-      if (catalog.length > 1) return sortItems(catalog);
-      const rebuilt = await rebuildFromEntries(code);
-      if (rebuilt.length > catalog.length) {
-        try {
-          await writeCatalog(code, rebuilt);
-        } catch {
-          /* still return what we have */
-        }
-        return sortItems(rebuilt);
-      }
-      return sortItems(catalog.length ? catalog : rebuilt);
+      if (catalog.length) return sortItems(catalog);
+      return [];
     } catch (error) {
       console.error("media list failed", error);
       return [];

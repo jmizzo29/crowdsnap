@@ -97,7 +97,7 @@ export async function supabaseListMedia(groupId) {
     .select("id, created_at, title, notes, media")
     .eq("group_id", groupId)
     .order("created_at", { ascending: false })
-    .limit(200);
+    .limit(5000);
   if (error) throw error;
   return flattenMedia(data);
 }

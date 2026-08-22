@@ -1,6 +1,10 @@
--- Grouppix schema. Safe to run on an existing CrowdSnap / Groupix project.
--- Groups are private: knowing the slug (the code) is the invite.
--- The app never renders a public directory.
+-- Grouppix. Paste this into the Supabase SQL editor.
+-- Then set VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY on Vercel and redeploy.
+-- Do not invent those values — copy them from the Supabase project settings.
+--
+-- Tables: groups, memories. Storage bucket: trip-media.
+-- One memory row per upload. A group can hold 5000+ photos.
+-- Knowing the slug (the group code) is the invite. There is no public directory.
 
 create table if not exists public.groups (
   id uuid primary key default gen_random_uuid(),
@@ -36,23 +40,23 @@ drop policy if exists "groups insert" on public.groups;
 drop policy if exists "memories read" on public.memories;
 drop policy if exists "memories insert" on public.memories;
 
--- Anon can read and create. There is still no UI directory.
--- For stricter privacy, revoke SELECT on these tables from anon
--- and set SUPABASE_SERVICE_ROLE_KEY so only /api can look up a code.
 create policy "groups read" on public.groups for select using (true);
 create policy "groups insert" on public.groups for insert with check (true);
 create policy "memories read" on public.memories for select using (true);
 create policy "memories insert" on public.memories for insert with check (true);
 
--- Storage bucket (create in the dashboard if it does not exist): trip-media
--- Public read, anon upload. Paths are namespaced by group slug.
--- Example storage policies (run after the bucket exists):
---
--- create policy "public read trip-media"
---   on storage.objects for select
---   using (bucket_id = 'trip-media');
---
--- create policy "anon upload trip-media"
---   on storage.objects for insert
---   to anon
---   with check (bucket_id = 'trip-media');
+insert into storage.buckets (id, name, public)
+values ('trip-media', 'trip-media', true)
+on conflict (id) do update set public = true;
+
+drop policy if exists "public read trip-media" on storage.objects;
+drop policy if exists "anon upload trip-media" on storage.objects;
+
+create policy "public read trip-media"
+  on storage.objects for select
+  using (bucket_id = 'trip-media');
+
+create policy "anon upload trip-media"
+  on storage.objects for insert
+  to anon
+  with check (bucket_id = 'trip-media');

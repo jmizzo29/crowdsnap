@@ -30,6 +30,18 @@ export function storageMode() {
 }
 
 export async function createGroup(input) {
+  if (hasSupabase) {
+    try {
+      const group = await supabaseCreateGroup(input);
+      if (group) {
+        await rememberGroup(group);
+        return group;
+      }
+    } catch (error) {
+      console.warn("Supabase create failed", error);
+    }
+  }
+
   if (await probeRemote()) {
     try {
       const group = await remoteCreateGroup(input);
@@ -40,24 +52,24 @@ export async function createGroup(input) {
     }
   }
 
-  if (hasSupabase) {
-    try {
-      const group = await supabaseCreateGroup(input);
-      if (group) {
-        await rememberGroup(group);
-        return group;
-      }
-    } catch (error) {
-      console.warn("Supabase create failed, keeping a local group", error);
-    }
-  }
-
   return localCreateGroup(input);
 }
 
 export async function getGroup(code) {
   const key = normalizeCode(code);
   if (!key) return null;
+
+  if (hasSupabase) {
+    try {
+      const group = await supabaseGetGroup(key);
+      if (group) {
+        await rememberGroup(group);
+        return group;
+      }
+    } catch (error) {
+      console.warn("Supabase get failed", error);
+    }
+  }
 
   if (await probeRemote()) {
     try {
@@ -71,14 +83,6 @@ export async function getGroup(code) {
     }
   }
 
-  if (hasSupabase) {
-    const group = await supabaseGetGroup(key);
-    if (group) {
-      await rememberGroup(group);
-      return group;
-    }
-  }
-
   const local = await localGetGroup(key);
   if (local) await rememberGroup(local);
   return local;
@@ -86,6 +90,14 @@ export async function getGroup(code) {
 
 export async function listMedia(group) {
   if (!group) return [];
+
+  if (hasSupabase && group.source === "supabase" && group.id) {
+    try {
+      return await supabaseListMedia(group.id);
+    } catch (error) {
+      console.warn("Supabase list failed", error);
+    }
+  }
 
   if (group.source === "remote" || (await probeRemote() && !group.localOnly && group.source !== "supabase")) {
     try {
@@ -96,7 +108,7 @@ export async function listMedia(group) {
     }
   }
 
-  if ((group.source === "supabase" || hasSupabase) && group.id && group.source !== "local") {
+  if (hasSupabase && group.id && group.source !== "local") {
     try {
       return await supabaseListMedia(group.id);
     } catch (error) {
@@ -120,24 +132,7 @@ export async function addMedia(group, file, { guestName = "", extra = {}, onProg
     ...extra,
   };
 
-  const useRemote = group.source === "remote" || (await probeRemote() && !group.localOnly && group.source !== "supabase" && group.source !== "local");
-  if (useRemote) {
-    if (onProgress) onProgress(0.05);
-    const url = await remoteUpload(group.code, file, base, onProgress);
-    let thumbUrl = extra.thumbUrl;
-    if (extra.thumbFile) {
-      thumbUrl = await remoteUpload(
-        group.code,
-        extra.thumbFile,
-        { ...base, id: `${id}-thumb` },
-      );
-    }
-    const item = { ...base, url, thumbUrl: thumbUrl || url, path: id };
-    await remoteAddMedia(group.code, item);
-    return item;
-  }
-
-  if (hasSupabase && group.id && !group.localOnly) {
+  if (hasSupabase && group.source === "supabase" && group.id && !group.localOnly) {
     const path = `${group.slug || group.code.toLowerCase()}/${id}-${safeName(file.name)}`;
     const url = await supabaseUploadFile(file, path, onProgress);
     let thumbUrl = extra.thumbUrl;
@@ -161,6 +156,23 @@ export async function addMedia(group, file, { guestName = "", extra = {}, onProg
       media,
     });
     return { ...media[0], memoryId: memory.id, createdAt: memory.created_at };
+  }
+
+  const useRemote = group.source === "remote" || (await probeRemote() && !group.localOnly && group.source !== "supabase" && group.source !== "local");
+  if (useRemote) {
+    if (onProgress) onProgress(0.05);
+    const url = await remoteUpload(group.code, file, base, onProgress);
+    let thumbUrl = extra.thumbUrl;
+    if (extra.thumbFile) {
+      thumbUrl = await remoteUpload(
+        group.code,
+        extra.thumbFile,
+        { ...base, id: `${id}-thumb` },
+      );
+    }
+    const item = { ...base, url, thumbUrl: thumbUrl || url, path: id };
+    await remoteAddMedia(group.code, item);
+    return item;
   }
 
   if (onProgress) onProgress(0.6);
