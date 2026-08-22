@@ -12,7 +12,6 @@ export default function Stand() {
   if (status === "loading") {
     return (
       <div className="page stand">
-        <div className="gel" />
         <div className="quiet">
           <p className="lede">Setting the table…</p>
         </div>
@@ -24,8 +23,6 @@ export default function Stand() {
 
   return (
     <div className="page stand">
-      <div className="gel" />
-      <div className="grain" />
       <div className="topbar">
         <Link className="wordmark" to="/">
           {APP_NAME}

@@ -22,8 +22,6 @@ export default function Marketing() {
 
   return (
     <div className="page">
-      <div className="grain" />
-
       <header className="hero">
         <div className="topbar">
           <span className="wordmark">{APP_NAME}</span>
@@ -31,18 +29,23 @@ export default function Marketing() {
             Buy
           </a>
         </div>
-        <div className="hero-body">
-          <p className="kicker">Tonight</p>
-          <h1 className="display display-xl">Put the QR on a table. The room fills the wall.</h1>
-          <p className="lede">Guests scan. They add a photo. It hits the wall.</p>
-          <div className="hero-actions">
-            <Link className="btn" to="/new">
-              Make a group
-            </Link>
-            <a className="btn-ghost" href="#how">
-              How it works
-            </a>
+        <div className="hero-split wrap">
+          <div className="hero-body">
+            <p className="kicker">Tonight</p>
+            <h1 className="display display-xl">Put the QR on a table. The room fills the wall.</h1>
+            <p className="lede">Guests scan. They add a photo. It hits the wall.</p>
+            <div className="hero-actions">
+              <Link className="btn" to="/new">
+                Make a group
+              </Link>
+              <a className="btn-ghost" href="#how">
+                How it works
+              </a>
+            </div>
           </div>
+          <figure className="hero-frame">
+            <img src="/images/hero-wedding.jpg" alt="" />
+          </figure>
         </div>
       </header>
 
@@ -84,9 +87,9 @@ export default function Marketing() {
               </ul>
             </div>
             <div className="stills">
-              <img className="tall" src="/images/still-kitchen.jpg" alt="" />
-              <img className="wide" src="/images/still-table.jpg" alt="" />
-              <img className="wide" src="/images/still-hall.jpg" alt="" />
+              <img className="tall" src="/images/still-wedding-guests.jpg" alt="" />
+              <img className="wide" src="/images/still-wedding-ceremony.jpg" alt="" />
+              <img className="wide" src="/images/still-wedding-after.jpg" alt="" />
             </div>
           </div>
         </section>

@@ -5,8 +5,6 @@ import { APP_NAME } from "../lib/config.js";
 export default function NewGroup() {
   return (
     <div className="page host">
-      <div className="gel" />
-      <div className="grain" />
       <div className="topbar">
         <Link className="wordmark" to="/">
           {APP_NAME}

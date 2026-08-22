@@ -9,16 +9,19 @@ import Wall from "./pages/Wall.jsx";
 
 export default function App() {
   return (
-    <Routes>
-      <Route path="/" element={<Marketing />} />
-      <Route path="/new" element={<NewGroup />} />
-      <Route path="/host/:id" element={<Host />} />
-      <Route path="/stand/:id" element={<Stand />} />
-      <Route path="/g/:id" element={<Wall />} />
-      <Route path="/g/:id/add" element={<Guest />} />
-      <Route path="/g/:id/booth" element={<Booth />} />
-      <Route path="/admin" element={<Navigate to="/" replace />} />
-      <Route path="*" element={<Navigate to="/" replace />} />
-    </Routes>
+    <>
+      <div className="lamp" aria-hidden="true" />
+      <Routes>
+        <Route path="/" element={<Marketing />} />
+        <Route path="/new" element={<NewGroup />} />
+        <Route path="/host/:id" element={<Host />} />
+        <Route path="/stand/:id" element={<Stand />} />
+        <Route path="/g/:id" element={<Wall />} />
+        <Route path="/g/:id/add" element={<Guest />} />
+        <Route path="/g/:id/booth" element={<Booth />} />
+        <Route path="/admin" element={<Navigate to="/" replace />} />
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
   );
 }
