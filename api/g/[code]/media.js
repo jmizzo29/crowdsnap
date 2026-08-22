@@ -1,6 +1,10 @@
 import { list, put } from "@vercel/blob";
 import { hasBlob, json, normalizeCode, readBody, supabaseAdmin } from "../../_lib.js";
 
+export const config = { maxDuration: 30 };
+
+const MEDIA_CAP = 5000;
+
 export default async function handler(req, res) {
   const code = normalizeCode(req.query.code);
   if (!code) {
@@ -36,10 +40,16 @@ function slugOf(code) {
   return normalizeCode(code).toLowerCase();
 }
 
-const MEDIA_CAP = 5000;
-
 function entryPrefix(code) {
   return `groups/${slugOf(code)}/entry/`;
+}
+
+function catalogPath(code) {
+  return `groups/${slugOf(code)}/catalog.json`;
+}
+
+function legacyIndexPath(code) {
+  return `groups/${slugOf(code)}/index.json`;
 }
 
 function clientTime(item) {
@@ -51,43 +61,112 @@ function clientTime(item) {
   return "";
 }
 
-async function listEntryBlobs(prefix) {
+function sortItems(items) {
+  return [...items].sort((a, b) => {
+    const left = String(b.takenAt || b.createdAt || "");
+    const right = String(a.takenAt || a.createdAt || "");
+    return left.localeCompare(right);
+  });
+}
+
+function upsertItem(list, item) {
+  const next = Array.isArray(list) ? list.filter((row) => row?.id && row.id !== item.id) : [];
+  next.push(item);
+  if (next.length <= MEDIA_CAP) return next;
+  return sortItems(next).slice(0, MEDIA_CAP);
+}
+
+async function listBlobs(prefix, pageLimit = 1000) {
   const blobs = [];
   let cursor;
-  for (let pageNum = 0; pageNum < 6; pageNum += 1) {
+  for (let pageNum = 0; pageNum < 8; pageNum += 1) {
     const page = await list({
       prefix,
-      limit: 1000,
+      limit: pageLimit,
       cursor,
     });
-    const batch = page.blobs || [];
-    blobs.push(...batch);
-    if (!batch.length || !page.cursor || page.cursor === cursor) break;
-    if (page.hasMore === false) break;
+    blobs.push(...(page.blobs || []));
+    if (!page.hasMore || !page.cursor) break;
     cursor = page.cursor;
     if (blobs.length >= MEDIA_CAP) break;
   }
   return blobs.slice(0, MEDIA_CAP);
 }
 
-async function readIndex(code) {
-  if (hasBlob()) {
-    const blobs = await listEntryBlobs(entryPrefix(code));
-    const items = [];
-    await Promise.all(
-      blobs.map(async (blob) => {
-        const remote = await fetch(blob.url, { cache: "no-store" });
-        if (!remote.ok) return;
-        const data = await remote.json();
-        if (data?.id && data?.url) items.push(data);
+async function readJsonAt(pathname) {
+  const blobs = await listBlobs(pathname, 5);
+  const blob = blobs.find((row) => row.pathname === pathname) || blobs[0];
+  if (!blob) return null;
+  const remote = await fetch(blob.url, { cache: "no-store" });
+  if (!remote.ok) return null;
+  const data = await remote.json();
+  if (!Array.isArray(data)) return null;
+  return data.filter((row) => row?.id && row?.url);
+}
+
+async function writeCatalog(code, items) {
+  const body = JSON.stringify(sortItems(items).slice(0, MEDIA_CAP));
+  const options = {
+    access: "public",
+    addRandomSuffix: false,
+    allowOverwrite: true,
+    contentType: "application/json",
+    cacheControlMaxAge: 0,
+  };
+  await put(catalogPath(code), body, options);
+  await put(legacyIndexPath(code), body, options);
+}
+
+async function rebuildFromEntries(code) {
+  const blobs = await listBlobs(entryPrefix(code));
+  const items = [];
+  const batchSize = 10;
+  for (let i = 0; i < blobs.length && items.length < MEDIA_CAP; i += batchSize) {
+    const chunk = blobs.slice(i, i + batchSize);
+    const rows = await Promise.all(
+      chunk.map(async (blob) => {
+        try {
+          const remote = await fetch(blob.url, { cache: "no-store" });
+          if (!remote.ok) return null;
+          const data = await remote.json();
+          return data?.id && data?.url ? data : null;
+        } catch {
+          return null;
+        }
       }),
     );
-    items.sort((a, b) => {
-      const left = String(b.takenAt || b.createdAt || "");
-      const right = String(a.takenAt || a.createdAt || "");
-      return left.localeCompare(right);
-    });
-    return items;
+    items.push(...rows.filter(Boolean));
+  }
+  return items;
+}
+
+async function loadCatalog(code) {
+  const catalog = await readJsonAt(catalogPath(code));
+  if (catalog?.length) return catalog;
+  const legacy = await readJsonAt(legacyIndexPath(code));
+  if (legacy?.length) return legacy;
+  return [];
+}
+
+async function readIndex(code) {
+  if (hasBlob()) {
+    try {
+      const catalog = await loadCatalog(code);
+      if (catalog.length > 1) return sortItems(catalog);
+      const rebuilt = await rebuildFromEntries(code);
+      if (rebuilt.length > catalog.length) {
+        try {
+          await writeCatalog(code, rebuilt);
+        } catch {
+          /* still return what we have */
+        }
+        return sortItems(rebuilt);
+      }
+      return sortItems(catalog.length ? catalog : rebuilt);
+    } catch (error) {
+      console.error("media list failed", error);
+      return [];
+    }
   }
 
   const supabase = supabaseAdmin();
@@ -139,6 +218,18 @@ async function writeItem(code, item) {
       contentType: "application/json",
       cacheControlMaxAge: 60,
     });
+
+    let catalog = await loadCatalog(code);
+    if (catalog.length <= 1) {
+      const rebuilt = await rebuildFromEntries(code);
+      if (rebuilt.length > catalog.length) catalog = rebuilt;
+    }
+    catalog = upsertItem(catalog, saved);
+    const listed = catalog.length <= 1 ? await listBlobs(entryPrefix(code)) : [];
+    if (catalog.length <= 1 && listed.length > 1) {
+      return saved;
+    }
+    await writeCatalog(code, catalog);
     return saved;
   }
 
