@@ -1,16 +1,17 @@
 import { generateCode, normalizeCode } from "./codes.js";
 
-let remoteState = null;
-
 export async function probeRemote() {
-  if (remoteState !== null) return remoteState;
+  if (typeof navigator !== "undefined" && navigator.onLine === false) return false;
   try {
-    const res = await fetch("/api/health", { headers: { accept: "application/json" } });
-    remoteState = res.ok;
+    const res = await fetch("/api/health", {
+      headers: { accept: "application/json" },
+      cache: "no-store",
+      signal: typeof AbortSignal !== "undefined" && AbortSignal.timeout ? AbortSignal.timeout(4000) : undefined,
+    });
+    return res.ok;
   } catch {
-    remoteState = false;
+    return false;
   }
-  return remoteState;
 }
 
 export async function remoteCreateGroup({ name, date, coverLine }) {
@@ -24,16 +25,24 @@ export async function remoteCreateGroup({ name, date, coverLine }) {
 }
 
 export async function remoteGetGroup(code) {
-  const res = await fetch(`/api/g/${encodeURIComponent(normalizeCode(code).toLowerCase())}`);
-  if (res.status === 404) return null;
-  if (!res.ok) throw new Error(await readError(res));
-  return res.json();
+  try {
+    const res = await fetch(`/api/g/${encodeURIComponent(normalizeCode(code).toLowerCase())}`, {
+      signal: typeof AbortSignal !== "undefined" && AbortSignal.timeout ? AbortSignal.timeout(6000) : undefined,
+    });
+    if (res.status === 404) return null;
+    if (!res.ok) return null;
+    return await res.json();
+  } catch {
+    return null;
+  }
 }
 
 export async function remoteListMedia(code) {
-  const res = await fetch(`/api/g/${encodeURIComponent(normalizeCode(code).toLowerCase())}/media`);
-  const text = await res.text();
   try {
+    const res = await fetch(`/api/g/${encodeURIComponent(normalizeCode(code).toLowerCase())}/media`, {
+      signal: typeof AbortSignal !== "undefined" && AbortSignal.timeout ? AbortSignal.timeout(8000) : undefined,
+    });
+    const text = await res.text();
     const data = JSON.parse(text);
     if (Array.isArray(data)) return data;
     if (Array.isArray(data.items)) return data.items;

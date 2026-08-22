@@ -30,6 +30,7 @@ export default function Host() {
         <QRCard value={url} label={`${group.name || group.date || "Grouppix"} QR`} />
         <p className="secret">{formatCode(group.code)}</p>
         <p className="note">Scan. Take one. It hits the wall.</p>
+        <p className="note">Open the QR once before you lose signal.</p>
         <ShareEvent group={group} />
         <HostLinks code={group.code} />
         {!isSharedGroup(group) ? (

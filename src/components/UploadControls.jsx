@@ -74,7 +74,13 @@ export default function UploadControls({
       onProgress: setProgress,
     });
     setProgress(1);
-    setToast(kind === "video" ? "The video is on the wall." : "It hit the wall.");
+    setToast(
+      item.pending
+        ? "On this phone. It will send when you have signal."
+        : kind === "video"
+          ? "The video is on the wall."
+          : "It hit the wall.",
+    );
     onAdded?.(item);
   }
 

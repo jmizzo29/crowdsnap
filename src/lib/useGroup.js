@@ -1,6 +1,7 @@
 import { useEffect, useState } from "react";
 import { useParams } from "react-router-dom";
 import { normalizeCode } from "./codes.js";
+import { localGetGroup } from "./localStore.js";
 import { getGroup } from "./store.js";
 
 export function useGroupFromRoute() {
@@ -10,15 +11,21 @@ export function useGroupFromRoute() {
 
   useEffect(() => {
     let alive = true;
-    getGroup(code)
-      .then((found) => {
+    (async () => {
+      try {
+        const cached = await localGetGroup(code);
+        if (alive && cached) setState({ code, group: cached, status: "ready" });
+        const found = await getGroup(code);
         if (!alive) return;
-        setState({ code, group: found, status: found ? "ready" : "missing" });
-      })
-      .catch(() => {
+        if (found) setState({ code, group: found, status: "ready" });
+        else if (!cached) setState({ code, group: null, status: "missing" });
+      } catch {
         if (!alive) return;
-        setState({ code, group: null, status: "missing" });
-      });
+        setState((current) =>
+          current.group ? current : { code, group: null, status: "missing" },
+        );
+      }
+    })();
     return () => {
       alive = false;
     };

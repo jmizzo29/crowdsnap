@@ -69,12 +69,12 @@ export default function Booth() {
     try {
       const compressed = await compressPhoto(file);
       const thumb = await makeThumb(compressed.file);
-      await addMedia(group, compressed.file, {
+      const item = await addMedia(group, compressed.file, {
         guestName,
         extra: { width: compressed.width, height: compressed.height, thumbFile: thumb.file },
       });
       setPreview(URL.createObjectURL(compressed.file));
-      setHelp("On the wall.");
+      setHelp(item.pending ? "On this phone. It will send when you have signal." : "On the wall.");
     } catch (error) {
       setHelp(error.message || "That frame did not land.");
     } finally {

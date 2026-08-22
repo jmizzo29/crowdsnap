@@ -1,4 +1,4 @@
-const VERSION = "grouppix-v7";
+const VERSION = "grouppix-v8";
 const SHELL = [
   "/",
   "/index.html",
@@ -65,20 +65,31 @@ async function networkFirst(request) {
     const fresh = await fetch(request);
     const cache = await caches.open(VERSION);
     cache.put(request, fresh.clone());
+    if (fresh.ok) cache.put("/index.html", fresh.clone());
     return fresh;
   } catch {
-    const cached = await caches.match(request);
-    return cached || caches.match("/index.html");
+    return (
+      (await caches.match(request)) ||
+      (await caches.match("/index.html")) ||
+      (await caches.match("/")) ||
+      new Response("<!doctype html><title>Grouppix</title><p>Open the QR once before you lose signal.</p>", {
+        headers: { "content-type": "text/html" },
+      })
+    );
   }
 }
 
 async function cacheFirst(request) {
   const cached = await caches.match(request);
   if (cached) return cached;
-  const fresh = await fetch(request);
-  if (fresh.ok || fresh.type === "opaque") {
-    const cache = await caches.open(VERSION);
-    cache.put(request, fresh.clone());
+  try {
+    const fresh = await fetch(request);
+    if (fresh.ok || fresh.type === "opaque") {
+      const cache = await caches.open(VERSION);
+      cache.put(request, fresh.clone());
+    }
+    return fresh;
+  } catch {
+    return new Response("", { status: 503, statusText: "offline" });
   }
-  return fresh;
 }

@@ -57,6 +57,7 @@ export async function localListMedia(code) {
       ...row,
       url: blob ? objectUrlFor(row.blobKey, blob) : row.url,
       thumbUrl: thumb ? objectUrlFor(row.thumbKey, thumb) : row.thumbUrl || row.url,
+      pending: Boolean(row.pending),
     });
   }
   return items;
@@ -85,14 +86,76 @@ export async function localAddMedia(code, item, { blob, thumb } = {}) {
   };
 }
 
-export async function rememberGroup(group) {
+export async function cacheGroup(group) {
   if (!group?.code) return;
+  const key = normalizeCode(group.code);
+  const prev = (await groupsDb.getItem(key)) || {};
+  await groupsDb.setItem(key, {
+    ...prev,
+    ...group,
+    code: key,
+    slug: (group.slug || key).toLowerCase(),
+    localOnly: Boolean(group.localOnly),
+  });
   const list = (await seenDb.getItem("list")) || [];
   const next = [
-    { code: group.code, name: group.name, date: group.date || "", seenAt: Date.now() },
-    ...list.filter((row) => row.code !== group.code),
+    { code: key, name: group.name, date: group.date || "", seenAt: Date.now() },
+    ...list.filter((row) => row.code !== key),
   ].slice(0, 12);
   await seenDb.setItem("list", next);
+}
+
+export async function rememberGroup(group) {
+  await cacheGroup(group);
+}
+
+export async function localUpdateMedia(code, id, patch) {
+  const key = normalizeCode(code);
+  const rows = (await mediaDb.getItem(key)) || [];
+  await mediaDb.setItem(
+    key,
+    rows.map((row) => (row.id === id ? { ...row, ...patch } : row)),
+  );
+}
+
+export async function localGetBlob(blobKey) {
+  if (!blobKey) return null;
+  return blobDb.getItem(blobKey);
+}
+
+export async function localListPending() {
+  const out = [];
+  await mediaDb.iterate((rows, code) => {
+    for (const row of rows || []) {
+      if (row.pending) out.push({ code, item: row });
+    }
+  });
+  return out;
+}
+
+export async function cacheRemoteMedia(code, remoteItems) {
+  const key = normalizeCode(code);
+  const existing = (await mediaDb.getItem(key)) || [];
+  const byId = new Map(existing.map((row) => [row.id || row.url, row]));
+  const next = [];
+  const seen = new Set();
+  for (const item of remoteItems || []) {
+    const id = item.id || item.url;
+    if (!id) continue;
+    seen.add(id);
+    const prev = byId.get(id);
+    next.push({
+      ...item,
+      pending: false,
+      blobKey: prev?.blobKey,
+      thumbKey: prev?.thumbKey,
+    });
+  }
+  for (const row of existing) {
+    const id = row.id || row.url;
+    if (row.pending && id && !seen.has(id)) next.unshift(row);
+  }
+  await mediaDb.setItem(key, next);
 }
 
 export async function listSeenGroups() {

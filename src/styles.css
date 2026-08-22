@@ -578,6 +578,13 @@ input, textarea {
   vertical-align: middle;
 }
 
+.tile-pending {
+  left: auto;
+  right: 10px;
+  top: 10px;
+  bottom: auto;
+}
+
 .tile .play {
   position: absolute;
   left: 10px;

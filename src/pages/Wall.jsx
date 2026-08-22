@@ -20,9 +20,11 @@ export default function Wall() {
     if (!group) return undefined;
     let alive = true;
     const tick = () => {
-      listMedia(group).then((rows) => {
-        if (alive) setItems(rows);
-      });
+      listMedia(group)
+        .then((rows) => {
+          if (alive) setItems(Array.isArray(rows) ? rows : []);
+        })
+        .catch(() => {});
     };
     const start = window.setTimeout(tick, 0);
     const timer = window.setInterval(tick, POLL_MS);
@@ -107,6 +109,7 @@ export default function Wall() {
                       />
                     )}
                     {item.kind === "video" ? <span className="play">Video</span> : null}
+                    {item.pending ? <span className="play tile-pending">Sending</span> : null}
                     {time ? <span className="tile-time">{formatShortTime(time)}</span> : null}
                   </button>
                 );
