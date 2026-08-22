@@ -44,7 +44,7 @@ export default function Marketing() {
             </div>
           </div>
           <figure className="hero-frame">
-            <img src="/images/hero-family.jpg" alt="" />
+            <img src="/images/hero-wedding.jpg" alt="" />
           </figure>
         </div>
       </header>
@@ -87,9 +87,9 @@ export default function Marketing() {
               </ul>
             </div>
             <div className="stills">
-              <img className="tall" src="/images/still-kitchen.jpg" alt="" />
-              <img className="wide" src="/images/still-table.jpg" alt="" />
-              <img className="wide" src="/images/still-hall.jpg" alt="" />
+              <img className="tall" src="/images/still-wedding-guests.jpg" alt="" />
+              <img className="wide" src="/images/still-wedding-ceremony.jpg" alt="" />
+              <img className="wide" src="/images/still-wedding-after.jpg" alt="" />
             </div>
           </div>
         </section>
