@@ -149,8 +149,18 @@ export default function Wall() {
       <Lightbox
         item={current}
         onClose={() => setOpen(-1)}
-        onPrev={() => setOpen((i) => (i <= 0 ? flat.length - 1 : i - 1))}
-        onNext={() => setOpen((i) => (i + 1) % flat.length)}
+        onPrev={() =>
+          setOpen((i) => {
+            if (flat.length < 1) return -1;
+            return i <= 0 ? flat.length - 1 : i - 1;
+          })
+        }
+        onNext={() =>
+          setOpen((i) => {
+            if (flat.length < 1) return -1;
+            return (Math.max(i, 0) + 1) % flat.length;
+          })
+        }
       />
     </div>
   );
