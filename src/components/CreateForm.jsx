@@ -38,7 +38,7 @@ export default function CreateForm({ heading = true }) {
       {heading ? (
         <div>
           <h2 className="display display-md">Name the event</h2>
-          <p className="lede">One night or several days. Same code.</p>
+          <p className="lede">One day or several. Same code.</p>
         </div>
       ) : null}
 

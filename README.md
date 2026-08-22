@@ -7,7 +7,7 @@ Live brand: **Grouppix** (`grouppix.vercel.app`). Repo name is still `crowdsnap`
 ## What you get
 
 - `/` — one-page site: how it works, who it is for, privacy, and a $49 once-per-event buy
-- `/new` — after payment: name the night, get a short code and QR
+- `/new` — after payment: name the event, get a short code and QR
 - `/host/:id` — host card (QR, code, stand / wall / phone)
 - `/stand/:id` — giant QR for a table or TV
 - `/g/:id` — the wall (masonry, live poll, thumbnails first)
@@ -27,21 +27,13 @@ Hand people the QR or the link on the stand. Knowing the code is the invite.
 
 Price is **$49 USD once per event**. Guests never pay. `/g/:id` stays free.
 
-The marketing **Buy · $49** and **Make a group · $49** buttons use `VITE_PAYMENT_LINK`. Leave that env var. Do not hardcode a Polar checkout URL in the app. The hosted Polar checkout is the payment page. There is no homemade card form.
-
-Create a Polar (polar.sh) checkout for **$49 USD once per event** (not a subscription). Cards stay on Polar. In the Polar product / checkout settings, set the success URL to:
+The marketing **Buy · $49** and **Make a group · $49** buttons go to Polar hosted checkout:
 
 ```
-https://grouppix.vercel.app/new
+https://buy.polar.sh/polar_cl_apRHHucdBtLfMWzRj8a6Wuc5ZUEG84qc1L4gA1uznbu
 ```
 
-That is where the host names the night and gets a code. Then set on Vercel:
-
-```
-VITE_PAYMENT_LINK=<your Polar checkout URL>
-```
-
-Until that env is set, Buy stays on the page (`#buy`). Soft gate only: paying lands on `/new`. No Polar webhooks, auth, or paid-token verifier.
+$49 USD once per event. Guests never pay. Cards stay on Polar. Success URL: `https://grouppix.vercel.app/new`. Soft gate: paying lands on `/new`. No Polar webhooks.
 
 ## Shared wall (two phones)
 
@@ -79,7 +71,7 @@ npm test
 
 1. Import `jmizzo29/crowdsnap`.
 2. Framework: Vite. Output: `dist`.
-3. Set `VITE_PAYMENT_LINK` to your Polar checkout URL ($49 once). Success URL: `https://grouppix.vercel.app/new`.
+3. Polar checkout is in the app. Success URL: `https://grouppix.vercel.app/new`.
 4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (or `BLOB_READ_WRITE_TOKEN`).
 5. Deploy. Routes are client-side; `vercel.json` rewrites the SPA and leaves `/api` alone.
 

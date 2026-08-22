@@ -214,13 +214,25 @@ input, textarea {
   background: var(--bg);
 }
 
+.hero-join {
+  padding: 22px 0 0;
+}
+
+.hero-join .code-entry {
+  margin-top: 10px;
+}
+
+.hero-join .seen {
+  margin-top: 14px;
+}
+
 .hero-split {
   flex: 1;
   display: grid;
   grid-template-columns: minmax(0, 1.1fr) minmax(0, 0.9fr);
   gap: 48px;
   align-items: center;
-  padding: 40px 0 64px;
+  padding: 28px 0 64px;
 }
 
 .hero-body {

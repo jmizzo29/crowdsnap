@@ -1,9 +1,7 @@
 export const APP_NAME = "Grouppix";
 
 export const PAYMENT_LINK =
-  import.meta.env.VITE_PAYMENT_LINK ||
-  import.meta.env.PAYMENT_LINK ||
-  "#buy";
+  "https://buy.polar.sh/polar_cl_apRHHucdBtLfMWzRj8a6Wuc5ZUEG84qc1L4gA1uznbu";
 
 export const MAX_VIDEO_MB = 80;
 export const MAX_VIDEO_BYTES = MAX_VIDEO_MB * 1024 * 1024;

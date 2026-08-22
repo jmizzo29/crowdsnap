@@ -28,6 +28,32 @@ export default function Marketing() {
             Buy · $49
           </a>
         </div>
+        <div className="hero-join wrap" id="code">
+          <p className="kicker">I have a code</p>
+          <form className="code-entry" onSubmit={join}>
+            <input
+              value={code}
+              onChange={(e) => setCode(e.target.value)}
+              placeholder="NITE"
+              autoCapitalize="characters"
+              autoCorrect="off"
+              aria-label="Open a group"
+            />
+            <button className="btn-line" type="submit">
+              Open
+            </button>
+          </form>
+          {seen.length > 0 ? (
+            <p className="seen">
+              On this phone:{" "}
+              {seen.map((row) => (
+                <Link key={row.code} to={`/g/${row.code.toLowerCase()}`}>
+                  {row.name}
+                </Link>
+              ))}
+            </p>
+          ) : null}
+        </div>
         <div className="hero-split wrap">
           <div className="hero-body">
             <h1 className="display display-xl">Share the QR. Or put it on a table. The wall fills up.</h1>
@@ -42,7 +68,7 @@ export default function Marketing() {
             </div>
           </div>
           <figure className="hero-frame">
-            <img src="/images/hero-youth.jpg" alt="Teens at a youth group night in a church rec room" />
+            <img src="/images/hero-youth.jpg" alt="Teens at a youth group in a church rec room" />
           </figure>
         </div>
       </header>
@@ -59,8 +85,8 @@ export default function Marketing() {
               </article>
               <article className="step">
                 <span className="step-num">02</span>
-                <h3>Put the QR where people stand</h3>
-                <p>A table. A door. A phone leaning on a glass. The stand view is built for a TV.</p>
+                <h3>Share the QR</h3>
+                <p>Send it in a chat. Put it on a table. The stand view is built for a TV.</p>
               </article>
               <article className="step">
                 <span className="step-num">03</span>
@@ -77,8 +103,8 @@ export default function Marketing() {
               <p className="kicker">Who it is for</p>
               <h2 className="section-title">Any private gathering that should stay in the room.</h2>
               <ul className="who-list">
-                <li>A youth group night in the rec room.</li>
-                <li>A lock-in, a game night, a cookout on the lawn.</li>
+                <li>A youth group in the rec room.</li>
+                <li>A lock-in, a game, a cookout on the lawn.</li>
                 <li>A retreat, a send-off, a Sunday after.</li>
                 <li>A graduation in a yard.</li>
                 <li>A wedding supper, or the lunch after.</li>
@@ -86,7 +112,7 @@ export default function Marketing() {
             </div>
             <div className="stills">
               <img className="tall" src="/images/still-youth-games.jpg" alt="Teens playing a giant block game at youth group" />
-              <img className="wide" src="/images/still-youth-outdoor.jpg" alt="Outdoor church youth night with lawn games" />
+              <img className="wide" src="/images/still-youth-outdoor.jpg" alt="Outdoor church youth group with lawn games" />
               <img className="wide" src="/images/still-youth-hangout.jpg" alt="Youth group hangout in a rec room" />
             </div>
           </div>
@@ -116,37 +142,6 @@ export default function Marketing() {
                 Buy · $49
               </a>
               <p className="fine">After you pay, you name the event and get your code.</p>
-            </div>
-          </div>
-        </section>
-
-        <section className="section" id="new">
-          <div className="wrap">
-            <div>
-              <p className="kicker">I have a code</p>
-              <h2 className="section-title">Open a group you were handed.</h2>
-              <form className="code-entry" onSubmit={join}>
-                <input
-                  value={code}
-                  onChange={(e) => setCode(e.target.value)}
-                  placeholder="CALM"
-                  autoCapitalize="characters"
-                  autoCorrect="off"
-                />
-                <button className="btn-line" type="submit">
-                  Open
-                </button>
-              </form>
-              {seen.length > 0 ? (
-                <p className="seen">
-                  On this phone:{" "}
-                  {seen.map((row) => (
-                    <Link key={row.code} to={`/g/${row.code.toLowerCase()}`}>
-                      {row.name}
-                    </Link>
-                  ))}
-                </p>
-              ) : null}
             </div>
           </div>
         </section>
