@@ -13,8 +13,8 @@ dist-ssr
 *.local
 .env
 .env.local
-.env.production
 .env.development
+# .env.production is committed: public anon key only (Vite embeds it).
 
 # Editor directories and files
 .vscode/*
