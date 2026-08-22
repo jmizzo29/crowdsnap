@@ -3,7 +3,7 @@ export const APP_NAME = "Grouppix";
 export const PAYMENT_LINK =
   import.meta.env.VITE_PAYMENT_LINK ||
   import.meta.env.PAYMENT_LINK ||
-  "https://buy.stripe.com/placeholder";
+  "#buy";
 
 export const MAX_VIDEO_MB = 80;
 export const MAX_VIDEO_BYTES = MAX_VIDEO_MB * 1024 * 1024;

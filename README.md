@@ -27,9 +27,9 @@ Hand people the QR or the link on the stand. Knowing the code is the invite.
 
 Price is **$49 USD once per event**. Guests never pay. `/g/:id` stays free.
 
-The marketing **Buy · $49** buttons use `VITE_PAYMENT_LINK`. Leave that env var. Do not hardcode a `buy.stripe.com` URL in the app.
+The marketing **Buy · $49** buttons use `VITE_PAYMENT_LINK`. Leave that env var. Do not hardcode a Polar checkout URL in the app.
 
-Create a Stripe Payment Link (one-time $49 USD, not a subscription). In the Payment Link settings, set the success URL to:
+Create a Polar (polar.sh) checkout for **$49 USD once per event** (not a subscription). Cards stay on Polar. In the Polar product / checkout settings, set the success URL to:
 
 ```
 https://grouppix.vercel.app/new
@@ -38,10 +38,10 @@ https://grouppix.vercel.app/new
 That is where the host names the night and gets a code. Then set on Vercel:
 
 ```
-VITE_PAYMENT_LINK=<your Stripe Payment Link>
+VITE_PAYMENT_LINK=<your Polar checkout URL>
 ```
 
-Until that env is set, Buy still points at the existing placeholder. Soft gate only: paying lands on `/new`. No webhooks, auth, or paid-token verifier.
+Until that env is set, Buy stays on the page (`#buy`). Soft gate only: paying lands on `/new`. No Polar webhooks, auth, or paid-token verifier.
 
 ## Shared wall (two phones)
 
@@ -79,7 +79,7 @@ npm test
 
 1. Import `jmizzo29/crowdsnap`.
 2. Framework: Vite. Output: `dist`.
-3. Set `VITE_PAYMENT_LINK` to your Stripe Payment Link ($49 once). Success URL: `https://grouppix.vercel.app/new`.
+3. Set `VITE_PAYMENT_LINK` to your Polar checkout URL ($49 once). Success URL: `https://grouppix.vercel.app/new`.
 4. Set `VITE_SUPABASE_URL` and `VITE_SUPABASE_ANON_KEY` (or `BLOB_READ_WRITE_TOKEN`).
 5. Deploy. Routes are client-side; `vercel.json` rewrites the SPA and leaves `/api` alone.
 
