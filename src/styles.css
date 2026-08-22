@@ -132,7 +132,10 @@ input, textarea {
   justify-content: space-between;
   align-items: center;
   gap: 16px;
-  padding: 22px 22px 0;
+  padding: calc(22px + env(safe-area-inset-top, 0px))
+    calc(22px + env(safe-area-inset-right, 0px))
+    0
+    calc(22px + env(safe-area-inset-left, 0px));
 }
 
 .btn {
@@ -496,7 +499,10 @@ input, textarea {
   justify-content: space-between;
   align-items: baseline;
   gap: 16px;
-  padding: 16px 16px 12px;
+  padding: calc(16px + env(safe-area-inset-top, 0px))
+    calc(16px + env(safe-area-inset-right, 0px))
+    12px
+    calc(16px + env(safe-area-inset-left, 0px));
   background: linear-gradient(180deg, var(--bg) 55%, transparent);
 }
 
@@ -652,7 +658,10 @@ input, textarea {
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding: 18px 18px 0;
+  padding: calc(18px + env(safe-area-inset-top, 0px))
+    calc(18px + env(safe-area-inset-right, 0px))
+    0
+    calc(18px + env(safe-area-inset-left, 0px));
   font-size: 12px;
   letter-spacing: 0.28em;
   text-transform: uppercase;

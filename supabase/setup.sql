@@ -1,10 +1,12 @@
--- Canonical paste file is supabase/setup.sql. Same SQL lives here.
--- Paste setup.sql into the Supabase SQL editor, then set
--- VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY on Vercel and redeploy.
--- Do not invent those values — copy them from the Supabase project settings.
+-- Grouppix. Paste this whole file into the Supabase SQL editor.
+-- Project they already have: crowdsnap_dev (ref cxvpozabohbieaplsvjw).
+-- Expected URL once the project is live: https://cxvpozabohbieaplsvjw.supabase.co
+--
+-- After this runs, paste VITE_SUPABASE_URL and VITE_SUPABASE_ANON_KEY into Vercel
+-- (Project → Settings → Environment Variables) and redeploy. Do not invent keys.
+-- No GitHub link is required on the Supabase project.
 --
 -- Tables: groups, memories. Storage bucket: trip-media.
--- One memory row per upload. A group can hold 5000+ photos.
 -- Knowing the slug (the group code) is the invite. There is no public directory.
 
 create table if not exists public.groups (
