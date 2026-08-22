@@ -4,6 +4,7 @@
   --well: #564b40;
   --raised: #7a6c5c;
   --ink: #f3ead8;
+  --paper: #faf6ec;
   --muted: #d4c6b0;
   --dim: #a89880;
   --gel: #c4a07a;
@@ -12,6 +13,7 @@
   --sand: #e8dcc8;
   --olive: #8f8a6e;
   --soil: #3f362c;
+  --chip: #2a241c;
   --line: rgba(232, 220, 200, 0.28);
   --serif: "Cormorant Garamond", "Times New Roman", serif;
   --sans: "Outfit", "Helvetica Neue", sans-serif;
@@ -89,15 +91,15 @@ input, textarea {
 }
 
 .kicker {
-  margin: 0 0 12px;
+  margin: 0 0 14px;
   display: inline-block;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 16px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink);
-  background: var(--soil);
-  padding: 5px 11px 4px;
+  color: var(--paper);
+  background: var(--chip);
+  padding: 6px 14px 5px;
   border-radius: 999px;
 }
 
@@ -179,11 +181,11 @@ input, textarea {
 }
 
 .field span {
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
   text-transform: uppercase;
-  color: var(--ink);
+  color: var(--paper);
 }
 
 .field input {
@@ -292,10 +294,10 @@ input, textarea {
 .step-num {
   display: block;
   margin-bottom: 14px;
-  font-size: 13px;
-  font-weight: 500;
-  letter-spacing: 0.12em;
-  color: var(--ink);
+  font-size: 15px;
+  font-weight: 600;
+  letter-spacing: 0.06em;
+  color: var(--paper);
 }
 
 .step h3 {
