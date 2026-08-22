@@ -1,4 +1,4 @@
-const VERSION = "grouppix-v4";
+const VERSION = "grouppix-v5";
 const SHELL = [
   "/",
   "/index.html",
