@@ -21,10 +21,8 @@ export default async function handler(req, res) {
         json(res, 400, { error: "Media item needs id and url." });
         return;
       }
-      const items = await readIndex(code);
-      const next = [item, ...items.filter((row) => row.id !== item.id)];
-      await writeIndex(code, next);
-      json(res, 200, item);
+      const saved = await writeItem(code, item);
+      json(res, 200, saved);
       return;
     }
 
@@ -34,14 +32,28 @@ export default async function handler(req, res) {
   }
 }
 
+function slugOf(code) {
+  return normalizeCode(code).toLowerCase();
+}
+
+function entryPrefix(code) {
+  return `groups/${slugOf(code)}/entry/`;
+}
+
 async function readIndex(code) {
   if (hasBlob()) {
-    const { blobs } = await list({ prefix: `groups/${code.toLowerCase()}/index.json`, limit: 1 });
-    if (!blobs?.length) return [];
-    const remote = await fetch(blobs[0].url);
-    if (!remote.ok) return [];
-    const data = await remote.json();
-    return Array.isArray(data) ? data : [];
+    const { blobs } = await list({ prefix: entryPrefix(code), limit: 1000 });
+    const items = [];
+    await Promise.all(
+      (blobs || []).map(async (blob) => {
+        const remote = await fetch(blob.url, { cache: "no-store" });
+        if (!remote.ok) return;
+        const data = await remote.json();
+        if (data?.id && data?.url) items.push(data);
+      }),
+    );
+    items.sort((a, b) => String(b.createdAt || "").localeCompare(String(a.createdAt || "")));
+    return items;
   }
 
   const supabase = supabaseAdmin();
@@ -49,7 +61,7 @@ async function readIndex(code) {
   const { data: group } = await supabase
     .from("groups")
     .select("id")
-    .eq("slug", code.toLowerCase())
+    .eq("slug", slugOf(code))
     .maybeSingle();
   if (!group) return [];
   const { data } = await supabase
@@ -74,15 +86,22 @@ async function readIndex(code) {
   return items;
 }
 
-async function writeIndex(code, items) {
+async function writeItem(code, item) {
+  const saved = {
+    ...item,
+    createdAt: item.createdAt || new Date().toISOString(),
+  };
+
   if (hasBlob()) {
-    await put(`groups/${code.toLowerCase()}/index.json`, JSON.stringify(items), {
+    const safeId = String(saved.id).replace(/[^a-zA-Z0-9._-]/g, "_");
+    await put(`${entryPrefix(code)}${safeId}.json`, JSON.stringify(saved), {
       access: "public",
       addRandomSuffix: false,
       allowOverwrite: true,
       contentType: "application/json",
+      cacheControlMaxAge: 60,
     });
-    return;
+    return saved;
   }
 
   const supabase = supabaseAdmin();
@@ -90,7 +109,7 @@ async function writeIndex(code, items) {
   const { data: group } = await supabase
     .from("groups")
     .select("id")
-    .eq("slug", code.toLowerCase())
+    .eq("slug", slugOf(code))
     .maybeSingle();
   if (!group) throw new Error("Group not found");
   await supabase.from("memories").insert([
@@ -98,9 +117,10 @@ async function writeIndex(code, items) {
       group_id: group.id,
       type: "media",
       day: "Upload",
-      title: items[0]?.guestName || items[0]?.name || "Upload",
-      notes: items[0]?.guestName || "",
-      media: [items[0]],
+      title: saved.guestName || saved.name || "Upload",
+      notes: saved.guestName || "",
+      media: [saved],
     },
   ]);
+  return saved;
 }

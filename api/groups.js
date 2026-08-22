@@ -60,11 +60,6 @@ async function createOnBlob({ name, date, coverLine, hint }) {
       addRandomSuffix: false,
       contentType: "application/json",
     });
-    await put(`groups/${slug}/index.json`, JSON.stringify([]), {
-      access: "public",
-      addRandomSuffix: false,
-      contentType: "application/json",
-    });
     return group;
   }
   throw new Error("Could not mint a free code.");
