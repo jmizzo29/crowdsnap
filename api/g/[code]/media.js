@@ -79,6 +79,7 @@ async function writeIndex(code, items) {
     await put(`groups/${code.toLowerCase()}/index.json`, JSON.stringify(items), {
       access: "public",
       addRandomSuffix: false,
+      allowOverwrite: true,
       contentType: "application/json",
     });
     return;
