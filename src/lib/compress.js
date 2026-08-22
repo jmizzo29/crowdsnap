@@ -129,7 +129,7 @@ export async function applyGel(file) {
   canvas.height = image.naturalHeight || image.height;
   const ctx = canvas.getContext("2d");
   ctx.drawImage(image, 0, 0);
-  ctx.fillStyle = "rgba(255, 111, 32, 0.28)";
+  ctx.fillStyle = "rgba(196, 120, 90, 0.22)";
   ctx.fillRect(0, 0, canvas.width, canvas.height);
   const blob = await canvasToBlob(canvas, "image/jpeg", 0.86);
   return new File([blob], renameJpeg(file.name), { type: "image/jpeg" });

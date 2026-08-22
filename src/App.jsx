@@ -11,7 +11,6 @@ export default function App() {
   return (
     <>
       <div className="lamp" aria-hidden="true" />
-      <div className="grain" aria-hidden="true" />
       <Routes>
         <Route path="/" element={<Marketing />} />
         <Route path="/new" element={<NewGroup />} />
