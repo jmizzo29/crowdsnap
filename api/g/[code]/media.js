@@ -97,7 +97,8 @@ async function readJsonAt(pathname) {
   const blobs = await listBlobs(pathname, 5);
   const blob = blobs.find((row) => row.pathname === pathname) || blobs[0];
   if (!blob) return null;
-  const remote = await fetch(blob.url, { cache: "no-store" });
+  const bust = blob.url.includes("?") ? "&" : "?";
+  const remote = await fetch(`${blob.url}${bust}v=${Date.now()}`, { cache: "no-store" });
   if (!remote.ok) return null;
   const data = await remote.json();
   if (!Array.isArray(data)) return null;
@@ -142,10 +143,10 @@ async function rebuildFromEntries(code) {
 
 async function loadCatalog(code) {
   const catalog = await readJsonAt(catalogPath(code));
-  if (catalog?.length) return catalog;
   const legacy = await readJsonAt(legacyIndexPath(code));
-  if (legacy?.length) return legacy;
-  return [];
+  const left = catalog || [];
+  const right = legacy || [];
+  return left.length >= right.length ? left : right;
 }
 
 async function readIndex(code) {
