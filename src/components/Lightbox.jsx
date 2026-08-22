@@ -70,11 +70,11 @@ export default function Lightbox({ item, onClose, onPrev, onNext }) {
           <img src={item.url} alt={item.name || ""} draggable="false" />
         )}
       </div>
-      <div className="lightbox-bar" onClick={stay}>
-        <button type="button" className="btn-ghost" onClick={goPrev}>
+      <div className="lightbox-nav" onClick={stay}>
+        <button type="button" className="btn-line" onClick={goPrev}>
           Prev
         </button>
-        <button type="button" className="btn-ghost" onClick={goNext}>
+        <button type="button" className="btn" onClick={goNext}>
           Next
         </button>
       </div>
