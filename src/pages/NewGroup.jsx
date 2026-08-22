@@ -14,7 +14,7 @@ export default function NewGroup() {
         </Link>
       </div>
       <div className="host-main" style={{ alignItems: "stretch", textAlign: "left", maxWidth: 560, margin: "0 auto", width: "100%" }}>
-        <p className="kicker">Your event</p>
+        <p className="kicker">After you pay</p>
         <CreateForm />
       </div>
     </div>

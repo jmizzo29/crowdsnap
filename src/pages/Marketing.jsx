@@ -1,6 +1,5 @@
 import { useEffect, useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-import CreateForm from "../components/CreateForm.jsx";
 import { APP_NAME, PAYMENT_LINK } from "../lib/config.js";
 import { normalizeCode } from "../lib/codes.js";
 import { listSeenGroups } from "../lib/localStore.js";
@@ -35,9 +34,9 @@ export default function Marketing() {
             <h1 className="display display-xl">Put the QR on a table. The room fills the wall.</h1>
             <p className="lede">Guests scan. They add a photo. It hits the wall.</p>
             <div className="hero-actions">
-              <Link className="btn" to="/new">
-                Make a group
-              </Link>
+              <a className="btn" href={PAYMENT_LINK}>
+                Make a group · $49
+              </a>
               <a className="btn-ghost" href="#how">
                 How it works
               </a>
@@ -123,8 +122,7 @@ export default function Marketing() {
         </section>
 
         <section className="section" id="new">
-          <div className="wrap create-panel">
-            <CreateForm />
+          <div className="wrap">
             <div>
               <p className="kicker">I have a code</p>
               <h2 className="section-title">Open a group you were handed.</h2>

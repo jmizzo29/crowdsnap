@@ -6,8 +6,8 @@ Live brand: **Grouppix** (`grouppix.vercel.app`). Repo name is still `crowdsnap`
 
 ## What you get
 
-- `/` — one-page site: how it works, who it is for, privacy, a one-time buy button, and a live create-group demo
-- `/new` — name the night, get a short code and QR
+- `/` — one-page site: how it works, who it is for, privacy, and a $49 once-per-event buy
+- `/new` — after payment: name the night, get a short code and QR
 - `/host/:id` — host card (QR, code, stand / wall / phone)
 - `/stand/:id` — giant QR for a table or TV
 - `/g/:id` — the wall (masonry, live poll, thumbnails first)
@@ -27,7 +27,7 @@ Hand people the QR or the link on the stand. Knowing the code is the invite.
 
 Price is **$49 USD once per event**. Guests never pay. `/g/:id` stays free.
 
-The marketing **Buy · $49** buttons use `VITE_PAYMENT_LINK`. Leave that env var. Do not hardcode a Polar checkout URL in the app.
+The marketing **Buy · $49** and **Make a group · $49** buttons use `VITE_PAYMENT_LINK`. Leave that env var. Do not hardcode a Polar checkout URL in the app. The hosted Polar checkout is the payment page. There is no homemade card form.
 
 Create a Polar (polar.sh) checkout for **$49 USD once per event** (not a subscription). Cards stay on Polar. In the Polar product / checkout settings, set the success URL to:
 
